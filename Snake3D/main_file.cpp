@@ -12,13 +12,42 @@
 #include "gamemodel.h"
 #include "simulation/simulation.h"
 #include "draw2D/draw2D.h"
-#include "callback/callback.h"
 #include "draw3D/draw3D.h"
 
 
 using namespace glm;
 
+//Global variables
+GameModel *model;
 
+
+
+//Handle callbacks.
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (action == GLFW_PRESS)
+	{
+		if (key == GLFW_KEY_RIGHT && model->direction != left)
+		{
+			model->direction_request = right;
+		}
+		if (key == GLFW_KEY_LEFT && model->direction != right)
+		{
+			model->direction_request = left;
+		}
+		if (key == GLFW_KEY_UP && model->direction != down)
+		{
+			model->direction_request = up;
+		}
+		if (key == GLFW_KEY_DOWN && model->direction != up)
+		{
+			model->direction_request = down;
+		}
+	}
+}
+
+
+//Preliminary initialisation.
 void preliminaryInit(GLFWwindow* window)
 {
 	if (!window) //Je¿eli okna nie uda³o siê utworzyæ, to zamknij program
@@ -40,6 +69,8 @@ void preliminaryInit(GLFWwindow* window)
 	}
 }
 
+
+
 //Initialisation procedure.
 void initOpenGLProgram(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod, który nale¿y wykonaæ raz, na pocz¹tku programu************
@@ -52,15 +83,25 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie budora g³êbokoœci
 	glEnable(GL_COLOR_MATERIAL); //W³¹cz œledzenie kolorów przez materia³
 
+	//Set attributes for window.
+
 	//Register callbacks.
 	glfwSetKeyCallback(window, key_callback);
+
+	//Set basis for random choice.
+	srand(time(NULL));
 }
+
 
 int main(int argc, char** argv) 
 {
+	//Hide console window.
+	//HWND hWnd = GetConsoleWindow();
+	//ShowWindow(hWnd, SW_HIDE);
+
 	//Variable definition
-	GLFWwindow* window; //WskaŸnik na obiekt reprezentuj¹cy okno
-	GameModel *model = new GameModel();
+	GLFWwindow* minimap_window; //Pointer to a minimap
+	model = new GameModel();
 
 	//Init glfw and glm, create window, handle errors.
 	if (!glfwInit()) { //Zainicjuj bibliotekê GLFW
@@ -69,30 +110,30 @@ int main(int argc, char** argv)
 	}
 
 
-	window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
-	preliminaryInit(window);
+	minimap_window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+	preliminaryInit(minimap_window);
 
 	//Set buffer moder, color, light and handle callbacks.
-	initOpenGLProgram(window);
+	initOpenGLProgram(minimap_window);
 
 	//Game loop
 	glfwSetTime(0);
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(minimap_window))
 	{
-		drawMinimap(window, model);
+		drawMinimap(minimap_window, model);
 
 		//Simulate changes in game every 1 second.
-		if (glfwGetTime() > 1) {
+		float passed_time = glfwGetTime();
+		if (passed_time > model->timeout) {
 			simulation(model);
 			glfwSetTime(0);
-			std::cout << model->head_position[0] << model->head_position[1] << std::endl;
 		}
 
 		glfwPollEvents(); //Wykonaj procedury callback w zaleznoœci od zdarzeñ jakie zasz³y.
 	}
 
 	//Release resources.
-	glfwDestroyWindow(window); //Usuñ kontekst OpenGL i okno
+	glfwDestroyWindow(minimap_window); //Usuñ kontekst OpenGL i okno
 	glfwTerminate(); //Zwolnij zasoby zajête przez GLFW
 	exit(EXIT_SUCCESS);
 }

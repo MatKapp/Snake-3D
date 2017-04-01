@@ -143,7 +143,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="callback\callback.cpp" />
     <ClCompile Include="draw2D\draw2D.cpp" />
     <ClCompile Include="draw3D\draw3D.cpp" />
     <ClCompile Include="main_file.cpp" />
@@ -154,7 +153,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="callback\callback.h" />
     <ClInclude Include="draw2D\draw2D.h" />
     <ClInclude Include="draw3D\draw3D.h" />
     <ClInclude Include="gamemodel.h" />

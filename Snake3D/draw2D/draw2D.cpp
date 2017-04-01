@@ -37,6 +37,9 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 			if (model->elements[y][x] == empty) {
 				glColor3f(1.0f, 0.0f, 0.0f);
 			}
+			else if (model->elements[y][x] == fodder) {
+				glColor3f(1.0f, 1.0f, 0.0f);
+			}
 			else if (model->elements[y][x] == snake_head) {
 				glColor3f(1.0f, 1.0f, 1.0f);
 			}

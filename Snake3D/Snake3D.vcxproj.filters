@@ -30,9 +30,6 @@
     <ClCompile Include="draw3D\draw3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="callback\callback.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -45,9 +42,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gamemodel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="callback\callback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="draw3D\draw3D.h">
