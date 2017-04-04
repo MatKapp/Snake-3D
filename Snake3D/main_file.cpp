@@ -12,14 +12,18 @@ void displayFrame() {
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glutSwapBuffers();
-}void initializeGLUT(int* pargc, char** argv) {
+}
+
+void initializeGLUT(int* pargc, char** argv) {
 	glutInit(pargc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(800, 800);
 	glutCreateWindow("Program OpenGL");
 	glutDisplayFunc(displayFrame);
-}void initializeGLEW() {
+}
+
+void initializeGLEW() {
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {
 		/* Problem: Nie uda³o siê zainicjowaæ biblioteki GLEW. */
