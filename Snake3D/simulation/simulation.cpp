@@ -13,6 +13,7 @@ Element move_snake(GameModel *model)
 	model->elements[model->head_position[0]][model->head_position[1]] = snake_part;
 	if (model->direction == right)
 	{
+		model->camera_location = left;
 		model->head_position[1]++;
 		//Go through the magic wall
 		if (model->head_position[1] == model->size) {
@@ -21,6 +22,7 @@ Element move_snake(GameModel *model)
 	}
 	else if (model->direction == left)
 	{
+		model->camera_location = right;
 		model->head_position[1]--;
 		//Go through the magic wall
 		if (model->head_position[1] == -1) {
@@ -29,6 +31,7 @@ Element move_snake(GameModel *model)
 	}
 	else if (model->direction == up)
 	{
+		model->camera_location = down;
 		model->head_position[0]++;
 		//Go through the magic wall
 		if (model->head_position[0] == model->size) {
@@ -37,6 +40,7 @@ Element move_snake(GameModel *model)
 	}
 	else if (model->direction == down)
 	{
+		model->camera_location = up;
 		model->head_position[0]--;
 		//Go through the magic wall
 		if (model->head_position[0] == -1) {
@@ -116,6 +120,7 @@ void update_map(GameModel *model)
 void simulation(GameModel* model) 
 {
 	Element eaten_element = move_snake(model);
+	
 
 	//Close the game if the snake is dead.
 	if (eaten_element == snake_head || eaten_element == snake_part || eaten_element == snake_tail)

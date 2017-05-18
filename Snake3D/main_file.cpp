@@ -21,6 +21,7 @@ using namespace glm;
 //Global variables
 GameModel *model;
 
+int callback_temp;
 
 
 //Handle callbacks.
@@ -28,24 +29,25 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (action == GLFW_PRESS)
 	{
-		if (key == GLFW_KEY_RIGHT && model->direction != left)
+		if (key == GLFW_KEY_RIGHT)
 		{
-			model->direction_request = right;
+			//model->direction_request = right;
+			model->direction_request = Direction((model->direction_request + 1) % 4);
 		}
-		if (key == GLFW_KEY_LEFT && model->direction != right)
+		if (key == GLFW_KEY_LEFT)
 		{
-			model->direction_request = left;
-		}
-		if (key == GLFW_KEY_UP && model->direction != down)
-		{
-			model->direction_request = up;
-		}
-		if (key == GLFW_KEY_DOWN && model->direction != up)
-		{
-			model->direction_request = down;
+			//model->direction_request = left;
+			callback_temp = int(model->direction_request) - 1;
+			if (callback_temp == -1) callback_temp = 3;
+
+			//model->direction_request = (Direction)( ( (int)model->direction_request - 1 ) % 4);
+
+			model->direction_request = Direction(callback_temp);
+
 		}
 	}
 }
+	
 
 
 
@@ -104,7 +106,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glClearColor(0, 0, 0, 1); //Ustaw kolor czyszczenia ekranu
 
 	glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
-	glEnable(GL_LIGHT0); //W³¹cz zerowe Ÿród³o œwiat³a
+	glEnable(GL_LIGHT1); //W³¹cz zerowe Ÿród³o œwiat³a
 	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie bufora g³êbokoœci
 	glEnable(GL_COLOR_MATERIAL); //W³¹cz œledzenie kolorów przez materia³
 
@@ -146,7 +148,7 @@ int main(int argc, char** argv)
 	
 	
 	//Game loop
-	glfwSetTime(0.0f);
+	model->timeout = 0.1f;
 	while (!glfwWindowShouldClose(minimap_window))
 	{
 		// Rysowanie gry i nak³adanie na obraz minimapy
@@ -157,7 +159,7 @@ int main(int argc, char** argv)
 
 		//Simulate changes in game every 1 second.
 		float passed_time = glfwGetTime();
-		if (glfwGetTime() > 0.1f) {
+		if (passed_time > model->timeout) {
 			simulation(model);
 			glfwSetTime(0.0f);
 		}
