@@ -14,7 +14,7 @@ public:
 	//Size of a map.
 	int size;
 	//A time which passes before a snake moves from one place to another (in seconds?).
-	float timeout = 0.1;
+	float timeout = 100.0f;
 	//A direction in which the snake currently moves.
 	Direction direction;
 	//A direction in which player wants to go.

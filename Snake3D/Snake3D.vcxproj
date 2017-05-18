@@ -23,14 +23,14 @@
     <ProjectGuid>{AC1E0EA9-15BC-497B-BB3D-0E2BE4A3412E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Snake3D</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Mateusz\Documents\Visual Studio 2017\Projects\Snake3D\Snake3D;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Mateusz\Documents\Visual Studio 2017\Projects\Snake3D\Snake3D;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.2\Include\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\winrt;C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\VS\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.10.25017\atlmfc\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.10.25017\include;‌;C:\Users\Mateusz\Documents\Visual Studio 2017\Projects\Snake3D\Snake3D;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10150.0\ucrt;C:\Users\Mateusz\Documents\Visual Studio 2017\Projects\Snake3D\Snake3D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -91,6 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Windows Kits\10\Include\10.0.10150.0\ucrt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +144,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\cube.cpp" />
+    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\detailed_cube.cpp" />
+    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\model.cpp" />
+    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\sphere.cpp" />
+    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\teapot.cpp" />
+    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\torus.cpp" />
     <ClCompile Include="draw2D\draw2D.cpp" />
     <ClCompile Include="draw3D\draw3D.cpp" />
     <ClCompile Include="main_file.cpp" />
@@ -153,6 +160,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\allmodels.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\constants.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\cube.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\detailed_cube.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\model.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\sphere.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\teapot.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\torus.h" />
+    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet03_win\myCube.h" />
     <ClInclude Include="draw2D\draw2D.h" />
     <ClInclude Include="draw3D\draw3D.h" />
     <ClInclude Include="gamemodel.h" />

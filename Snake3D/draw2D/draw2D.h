@@ -14,6 +14,9 @@
 #include "../figures/allmodels.h"
 #include "../gamemodel.h"
 
+
 void drawMinimap(GLFWwindow* window, GameModel *model);
+
+
 
 #endif

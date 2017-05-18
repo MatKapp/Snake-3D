@@ -120,6 +120,7 @@ void simulation(GameModel* model)
 	//Close the game if the snake is dead.
 	if (eaten_element == snake_head || eaten_element == snake_part || eaten_element == snake_tail)
 	{
+		
 		printf("END");
 		system("pause");
 	}

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include "GL/glew.h"
 #include "GL/glut.h"
@@ -47,7 +48,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 
-<<<<<<< HEAD
+
 void displayFrame() {
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -69,10 +70,10 @@ void initializeGLEW() {
 		/* Problem: Nie uda³o siê zainicjowaæ biblioteki GLEW. */
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		exit(1);
-=======
+	}
+}
 //Preliminary initialisation.
-void preliminaryInit(GLFWwindow* window)
-{
+void preliminaryInit(GLFWwindow* window){
 	if (!window) //Je¿eli okna nie uda³o siê utworzyæ, to zamknij program
 	{
 		glfwTerminate();
@@ -89,7 +90,7 @@ void preliminaryInit(GLFWwindow* window)
 	if ((err = glewInit()) != GLEW_OK) { //Zainicjuj bibliotekê GLEW
 		fprintf(stderr, "Nie mo¿na zainicjowaæ GLEW: %s\n", glewGetErrorString(err));
 		exit(EXIT_FAILURE);
->>>>>>> origin/master
+
 	}
 }
 
@@ -104,7 +105,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
 	glEnable(GL_LIGHT0); //W³¹cz zerowe Ÿród³o œwiat³a
-	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie budora g³êbokoœci
+	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie bufora g³êbokoœci
 	glEnable(GL_COLOR_MATERIAL); //W³¹cz œledzenie kolorów przez materia³
 
 	//Set attributes for window.
@@ -117,8 +118,12 @@ void initOpenGLProgram(GLFWwindow* window) {
 }
 
 
+
+
+
 int main(int argc, char** argv) 
 {
+	
 	//Hide console window.
 	//HWND hWnd = GetConsoleWindow();
 	//ShowWindow(hWnd, SW_HIDE);
@@ -132,27 +137,31 @@ int main(int argc, char** argv)
 		fprintf(stderr, "Nie mo¿na zainicjowaæ GLFW.\n");
 		exit(EXIT_FAILURE);
 	}
-
-
-	minimap_window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+	
+	minimap_window = glfwCreateWindow(1000, 1000, "Minimap", NULL, NULL);  //Utwórz okno 500x500 o tytule "Minimap" i kontekst OpenGL.
 	preliminaryInit(minimap_window);
 
 	//Set buffer moder, color, light and handle callbacks.
 	initOpenGLProgram(minimap_window);
-
+	
+	
 	//Game loop
-	glfwSetTime(0);
+	glfwSetTime(0.0f);
 	while (!glfwWindowShouldClose(minimap_window))
 	{
+		// Rysowanie gry i nak³adanie na obraz minimapy
+		drawGame(minimap_window, model);
 		drawMinimap(minimap_window, model);
+		
+		glfwSwapBuffers(minimap_window); //Przerzuæ tylny bufor na przedni
 
 		//Simulate changes in game every 1 second.
 		float passed_time = glfwGetTime();
-		if (passed_time > model->timeout) {
+		if (glfwGetTime() > 0.1f) {
 			simulation(model);
-			glfwSetTime(0);
+			glfwSetTime(0.0f);
 		}
-
+		
 		glfwPollEvents(); //Wykonaj procedury callback w zaleznoœci od zdarzeñ jakie zasz³y.
 	}
 
