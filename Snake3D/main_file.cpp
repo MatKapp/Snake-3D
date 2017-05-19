@@ -148,7 +148,7 @@ int main(int argc, char** argv)
 	
 	
 	//Game loop
-	model->timeout = 0.1f;
+	model->timeout = 0.001f;
 	while (!glfwWindowShouldClose(minimap_window))
 	{
 		// Rysowanie gry i nak³adanie na obraz minimapy

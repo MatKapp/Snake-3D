@@ -1,21 +1,22 @@
 #include "draw3D.h"
 using namespace glm;
-int scale_value = 0.4;
+float scale_value = 1.0f;
 
 mat4 change_camera(GameModel* model) {
 	mat4 V;
 	
 	if (model->direction == up) {
 		V = lookAt( //Wylicz macierz widoku
-			vec3(0.4*model->head_position[1], model->size* 0.4f, ((1.2f *(float)model->size) - 0.4 *model->head_position[0])),
-			vec3(model->head_position[1] * 0.4f, 1.0f, -0.4*model->head_position[0] + 0.4 * model->size),
+			vec3(model->size*scale_value - scale_value*model->head_position[1], model->size* scale_value, -model->size*scale_value + model->head_position[0]*scale_value),
+			
+			vec3(model->size*scale_value - model->head_position[1] * scale_value, 1.0f, model->head_position[0]*scale_value),
 			vec3(0.0f, 1.0f, 0.0f));
 
 	}
 	else if (model->direction == down) {
 		V = lookAt( //Wylicz macierz widoku
-			vec3(0.4*model->head_position[1], model->size* 0.4f, (-(0.4f *(float)model->size) - 0.4 *model->head_position[0])),
-			vec3(model->head_position[1] * 0.4f, 1.0f, -0.4*model->head_position[0] + 0.4 * model->size),
+			vec3(model->size*scale_value - scale_value*model->head_position[1], model->size* scale_value, model->size*scale_value + model->head_position[0] * scale_value),
+			vec3(model->size*scale_value - model->head_position[1] * scale_value, 1.0f, model->head_position[0] * scale_value),
 			vec3(0.0f, 1.0f, 0.0f));
 
 	}
@@ -23,15 +24,15 @@ mat4 change_camera(GameModel* model) {
 	
 	else if (model->direction == left) {
 		V = lookAt( //Wylicz macierz widoku
-			vec3(2 * 0.4f*model->size + 0.4 *model->head_position[1], model->size* 0.4f, 0.4* model->size - 0.4*model->head_position[0]),
-			vec3(model->head_position[1] * 0.4f, 1.0f, -0.4*model->head_position[0] + 0.4 * model->size),
+			vec3(- model->size * scale_value  + model->size - model->head_position[1]*scale_value , model->size* scale_value, model->head_position[0]*scale_value),
+			vec3(model->size*scale_value - model->head_position[1] * scale_value, 1.0f, model->head_position[0] * scale_value),
 			vec3(0.0f, 1.0f, 0.0f));
 
 	}
 	else if (model->direction = right) {
 		V = lookAt( //Wylicz macierz widoku
-			vec3(-2 * 0.4f*model->size + 0.4 *model->head_position[1], model->size* 0.4f, 0.4* model->size - 0.4*model->head_position[0]),
-			vec3(model->head_position[1] * 0.4f, 1.0f, -0.4*model->head_position[0] + 0.4 * model->size),
+			vec3(model->size*scale_value + model->size - model->head_position[1], model->size* scale_value, model->head_position[0] * scale_value),
+			vec3(model->size*scale_value - model->head_position[1] * scale_value, 1.0f, model->head_position[0] * scale_value),
 			vec3(0.0f, 1.0f, 0.0f));
 	}
 
@@ -123,7 +124,7 @@ void drawGame(GLFWwindow* window, GameModel *model) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Wyczyœæ bufor kolorów (czyli przygotuj "p³ótno" do rysowania)
 
 														//***Przygotowanie do rysowania****
-	mat4 P = perspective(50.0f*PI / 180.0f, 1.0f, 1.0f, 100.0f); //Wylicz macierz rzutowania P
+	mat4 P = perspective(50.0f*PI / 180.0f, 1.0f, 1.0f, 200.0f); //Wylicz macierz rzutowania P
 	glMatrixMode(GL_PROJECTION); //W³¹cz tryb modyfikacji macierzy rzutowania
 	glLoadMatrixf(value_ptr(P)); //Za³aduj macierz rzutowania
 	glMatrixMode(GL_MODELVIEW);  //W³¹cz tryb modyfikacji macierzy model-widok
@@ -163,8 +164,9 @@ void drawGame(GLFWwindow* window, GameModel *model) {
 			}
 
 			mat4 M = mat4(1.0f);
-			M = scale(M, vec3(0.4f, 0.4f, 0.4f));
-			M = translate(M, vec3( x, -1.0f, 21 - y));
+			M = scale(M, vec3(scale_value, scale_value, scale_value));
+			//M = translate(M, vec3(-0.5f * scale_value * model->size + x*scale_value, 0.0f, -0.5f*scale_value * model->size + y*scale_value));
+			M = translate(M, vec3(model->size *scale_value -x*scale_value, 0.0f, y*scale_value));
 			mat4 V= change_camera(model);
 			glLoadMatrixf(value_ptr(V*M));
 			
@@ -178,8 +180,8 @@ void drawGame(GLFWwindow* window, GameModel *model) {
 
 			glDrawArrays(GL_QUADS, 0, 4); //Rysuj model
 			M = mat4(1.0f);
-			M = scale(M, vec3(0.4f, 0.4f, 0.4f));
-			M = translate(M, vec3( x, 0.0f, 21 - y));
+			M = scale(M, vec3(scale_value, scale_value, scale_value));
+			M = translate(M, vec3(model->size *scale_value - x*scale_value, 0.0f, y*scale_value));
 			glLoadMatrixf(value_ptr(V*M));
 
 
