@@ -65,6 +65,7 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 	
 
 	// Rysowanie kwadratów
+	mat4 M;
 	for (int y = 0; y < model->size; y++)
 	{
 		for (int x = 0; x < model->size; x++)
@@ -81,52 +82,29 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 			else if (model->elements[y][x] == fodder) {
 				glColorPointer(3, GL_FLOAT, 0, smallQuadColorsGreen);
 			}
-			else if (model->elements[y][x] == snake_head) {
-				glColorPointer(3, GL_FLOAT, 0, smallQuadColorsBlue); 
-			}
 			else if (model->elements[y][x] == snake_part) {
+				glColorPointer(3, GL_FLOAT, 0, smallQuadColorsBlue);
+			}
+			else if (model->elements[y][x] == snake_head) {
 				glColorPointer(3, GL_FLOAT, 0, smallQuadColorsBlue); 
 			}
 			else if (model->elements[y][x] == snake_tail) {
 				glColorPointer(3, GL_FLOAT, 0, smallQuadColorsBlue); 
 			}
 			
-			mat4 M = mat4(1.0f);
+			M = mat4(1.0f);
 			M = scale(M, vec3(0.1f, 0.1f, 0.1f));
 			M = translate(M, vec3( offset + x*grid + x,  offset +   y*grid + y, 0.0f));
 			glLoadMatrixf(value_ptr(V*M));
 			
 
-
-
-
-
-
-
-			//glRectf(offset + (0.9f + x) / 5, offset + (0.1f + y) / 5, offset + (0.1f + x) / 5, offset + (0.9f + y) / 5);
-			/*
-			glBegin(GL_QUADS); // 1x1 pixel
-			
-			
-			
-			glVertex2f(offset + ( 0.1f + x)/5,offset + ( 0.9f + y)/5);
-			glVertex2f(offset + (0.1f + x) / 5, offset + (0.1f + y) / 5);
-			glVertex2f(offset + (0.9f + x) / 5, offset + (0.1f + y) / 5);
-			glVertex2f(offset + (0.9f + x) / 5, offset + (0.9f + y) / 5);
-
-			glEnd();*/
-
 			glVertexPointer(3, GL_FLOAT, 0, smallQuadVertices); //Ustaw tablicê myCubeVertices jako tablicê wierzcho³ków
 
-			//glColorPointer(3, GL_FLOAT, 0, smallQuadColors); //Ustaw tablicê myCubeColors jako tablicê kolorów
 
-			glDrawArrays(GL_QUADS, 0, 4); //Rysuj model
-
-										  //Posprz¹taj po sobie
-			
-		}
-		
+			glDrawArrays(GL_QUADS, 0, 4); //Rysuj model			
+		}		
 	}
+									  //Posprz¹taj po sobie
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 

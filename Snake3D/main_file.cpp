@@ -32,12 +32,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		if (key == GLFW_KEY_RIGHT)
 		{
 			//model->direction_request = right;
-			model->direction_request = Direction((model->direction_request + 1) % 4);
+			model->direction_request = Direction((model->direction + 1) % 4);
 		}
 		if (key == GLFW_KEY_LEFT)
 		{
 			//model->direction_request = left;
-			callback_temp = int(model->direction_request) - 1;
+			callback_temp = int(model->direction) - 1;
 			if (callback_temp == -1) callback_temp = 3;
 
 			//model->direction_request = (Direction)( ( (int)model->direction_request - 1 ) % 4);
@@ -148,19 +148,19 @@ int main(int argc, char** argv)
 	
 	
 	//Game loop
-	model->timeout = 0.001f;
-	while (!glfwWindowShouldClose(minimap_window))
-	{
+	float passed_time = 0;
+	glfwSetTime(0.0f);
+	while (!glfwWindowShouldClose(minimap_window)){
+		passed_time = glfwGetTime();
 		// Rysowanie gry i nak³adanie na obraz minimapy
-		drawGame(minimap_window, model);
-		drawMinimap(minimap_window, model);
-		
+		drawGame(minimap_window, model, passed_time);
+		//drawMinimap(minimap_window, model);
 		glfwSwapBuffers(minimap_window); //Przerzuæ tylny bufor na przedni
 
 		//Simulate changes in game every 1 second.
-		float passed_time = glfwGetTime();
+		passed_time = glfwGetTime();
 		if (passed_time > model->timeout) {
-			simulation(model);
+			simulation(model, passed_time);
 			glfwSetTime(0.0f);
 		}
 		

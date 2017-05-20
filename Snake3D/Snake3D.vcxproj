@@ -23,32 +23,32 @@
     <ProjectGuid>{AC1E0EA9-15BC-497B-BB3D-0E2BE4A3412E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Snake3D</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -80,9 +80,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -144,12 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\cube.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\detailed_cube.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\model.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\sphere.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\teapot.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\pl_szkielet01_win\torus.cpp" />
     <ClCompile Include="draw2D\draw2D.cpp" />
     <ClCompile Include="draw3D\draw3D.cpp" />
     <ClCompile Include="main_file.cpp" />
@@ -160,15 +156,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\allmodels.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\constants.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\cube.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\detailed_cube.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\model.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\sphere.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\teapot.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet01_win\torus.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\pl_szkielet03_win\myCube.h" />
     <ClInclude Include="draw2D\draw2D.h" />
     <ClInclude Include="draw3D\draw3D.h" />
     <ClInclude Include="gamemodel.h" />

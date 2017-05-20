@@ -14,13 +14,17 @@ public:
 	//Size of a map.
 	int size;
 	//A time which passes before a snake moves from one place to another (in seconds?).
-	float timeout = 0.1f;
+	float timeout;
 	//A direction in which the snake currently moves.
 	Direction direction;
+	//A direction in which the snake moved last time.
+	Direction direction_old;
 	//A direction in which player wants to go.
 	Direction direction_request;
-	//A maximal number of fodder elements.
-	int fodder = 0;
+	//A current number of fodder elements.
+	int fodder;
+	//Maximum number of fodder elements
+	int max_fodder;
 	//A map with all of the elements in the game.
 	Element elements[SIZE][SIZE];
 	//Location of a camera
@@ -32,6 +36,14 @@ public:
 	std::list<int> snake_positions_x;
 	int head_position[2];
 	int tail_position[2];
+
+	//Positions of head and tail from last round
+	int head_old_position[2];
+	int tail_old_position[2];
+
+	//Positions of head and tail from last round
+	float head_visible_position[2];
+	float tail_visible_position[2];
 
 	GameModel();
 };

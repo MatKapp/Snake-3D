@@ -14,6 +14,6 @@
 #include "../gamemodel.h"
 
 
-void drawGame(GLFWwindow* window, GameModel *model);
+void drawGame(GLFWwindow* window, GameModel *model, float passed_time);
 	
 #endif

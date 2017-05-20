@@ -1,13 +1,23 @@
 #include "simulation.h"
 
 //Move the snake.
-Element move_snake(GameModel *model)
+Element move_snake(GameModel *model, float passed_time)
 {
 	//This variable stores the element to which the head of the snake moves.
 	Element eaten_element;
 
+	//Update the old direction variable.
+	model->direction_old = model->direction;
+
 	//Update the direction. Set the direction to the direction where player wants to go.
 	model->direction = model->direction_request;
+
+
+	//Store current head and tail positions in variables that store head and tail positions from ast round
+	model->head_old_position[0] = model->head_position[0];
+	model->head_old_position[1] = model->head_position[1];
+	model->tail_old_position[0] = model->tail_position[0];
+	model->tail_old_position[1] = model->tail_position[1];
 
 	//Move head.
 	model->elements[model->head_position[0]][model->head_position[1]] = snake_part;
@@ -83,7 +93,7 @@ Element move_snake(GameModel *model)
 void update_map(GameModel *model)
 {
 	//Add fodder at random place with given probability if there is not too much fodder on map.
-	if (model->fodder < 10)
+	if (model->fodder < model->max_fodder)
 	{
 		float probability = 0.25;
 		//If success is greater than probability then we will add a fodder in a random place.
@@ -117,16 +127,16 @@ void update_map(GameModel *model)
 }
 
 //Procedure that simulates changes in the model.
-void simulation(GameModel* model) 
+void simulation(GameModel* model, float passed_time) 
 {
-	Element eaten_element = move_snake(model);
+	Element eaten_element = move_snake(model, passed_time);
 	
 
 	//Close the game if the snake is dead.
 	if (eaten_element == snake_head || eaten_element == snake_part || eaten_element == snake_tail)
 	{
 		
-		printf("END");
+		printf("END\n");
 		system("pause");
 	}
 

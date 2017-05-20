@@ -5,7 +5,12 @@ GameModel::GameModel()
 {
 	size = SIZE;
 	direction = left;
+	direction_old = left;
 	direction_request = left;
+
+	fodder = 0;
+	max_fodder = 10;
+	timeout = 0.4;
 
 	//Create the initial table.
 	for (int i = 0; i < size; i++) {
@@ -29,4 +34,14 @@ GameModel::GameModel()
 	head_position[1] = 4;
 	tail_position[0] = 4;
 	tail_position[1] = 6;
+
+	head_old_position[0] = 4;
+	head_old_position[1] = 4;
+	tail_old_position[0] = 4;
+	tail_old_position[1] = 6;
+
+	head_visible_position[0] = 4;
+	head_visible_position[1] = 4;
+	tail_visible_position[0] = 4;
+	tail_visible_position[1] = 6;
 }
