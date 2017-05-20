@@ -3,13 +3,26 @@
 
 GameModel::GameModel()
 {
+	stopped = false;
 	size = SIZE;
 	direction = left;
 	direction_old = left;
 	direction_request = left;
 
+	//Current and max numbers of elements
 	fodder = 0;
 	max_fodder = 10;
+	fodder_probability = 0.25;
+	traps = 0;
+	max_traps = 8;
+	trap_probability = 0.02;
+	speed_boosts = 0;
+	max_speed_boosts = 1;
+	speed_boost_probability = 0.05;
+	slow_boosts = 0;
+	max_slow_boosts = 1;
+	slow_boost_probability = 0.05;
+
 	timeout = 0.4;
 
 	//Create the initial table.

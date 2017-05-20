@@ -79,49 +79,93 @@ Element move_snake(GameModel *model, float passed_time)
 		model->tail_position[1] = model->snake_positions_x.back();
 		model->elements[model->tail_position[0]][model->tail_position[1]] = snake_tail;
 	}
-	//Decrease the number of existing fodder if a snake ate a fodder.
-	else
+
+	//Decrease the number of existing elemets if a snake ate this element.
+	if(eaten_element == fodder)
 	{
 		model->fodder--;
+	}
+	else if (eaten_element == trap) {
+		model->traps--;
+	}
+	else if (eaten_element == speed_boost) {
+		model->timeout = 0.75 * model->timeout;
+		model->speed_boosts--;
+	}
+	else if (eaten_element == slow_boost) {
+		model->timeout = 1.5 * model->timeout;
+		model->slow_boosts--;
 	}
 
 	return eaten_element;
 }
 
+//Adds the fodder to a specific place on the map
+void addElement(GameModel *model, Element element)
+{
+	//Try to draw a random, but empty place on the map.
+	//It is possible, that a map will be too occupied to draw a place.
+	//Don't add a fodder then.
+	//We implement this behaviour by drawing in for loop.
+	int y, x;
+	for (int i = 0; i < 10; i++)
+	{
+		y = rand() % model->size;
+		x = rand() % model->size;
+		if (model->elements[y][x] == empty)
+		{
+			break;
+		}
+	}
+	model->elements[y][x] = element;
+}
 
 //Make random updates to the map.
 void update_map(GameModel *model)
 {
-	//Add fodder at random place with given probability if there is not too much fodder on map.
-	if (model->fodder < model->max_fodder)
-	{
-		float probability = 0.25;
-		//If success is greater than probability then we will add a fodder in a random place.
-		float success = ((rand() % 100) / 100.0);
+	//If success is greater than probability then we will add an element der in a random place.
+	float success = ((rand() % 100) / 100.0);
 
-		//Add fodder.
-		if (success < probability)
+	if (model->fodder < model->max_fodder) {
+		//Try to add fodder.
+		if (success < model->fodder_probability)
 		{
-			//Try to draw a random, but empty place on the map.
-			//It is possible, that a map will be too occupied to draw a place.
-			//Don't add a fodder then.
-			//We implement this behaviour by drawing in for loop.
-			int y, x;
-			for (int i = 0; i < 10; i++)
-			{
-				y = rand() % model->size;
-				x = rand() % model->size;
-				if (model->elements[y][x] == empty)
-				{
-					break;
-				}
-			}
-
-			//
-			model->elements[y][x] = fodder;
-
+			addElement(model, fodder);
 			//Increment the number of existing fodder.
 			model->fodder++;
+		}
+	}
+
+	success = ((rand() % 100) / 100.0);
+	if (model->traps < model->max_traps) {
+		//Try to add a trap
+		if (success < model->trap_probability)
+		{
+			addElement(model, trap);
+			//Increment the number of existing fodder.
+			model->traps++;
+		}
+	}
+
+	success = ((rand() % 100) / 100.0);
+	if (model->speed_boosts < model->max_speed_boosts) {
+		//Try to add a speed boost
+		if (success < model->speed_boost_probability)
+		{
+			addElement(model, speed_boost);
+			//Increment the number of existing fodder.
+			model->speed_boosts++;
+		}
+	}
+
+	success = ((rand() % 100) / 100.0);
+	if (model->slow_boosts < model->max_slow_boosts) {
+		//Try to add a slow boost
+		if (success < model->slow_boost_probability)
+		{
+			addElement(model, slow_boost);
+			//Increment the number of existing fodder.
+			model->slow_boosts++;
 		}
 	}
 }
@@ -133,11 +177,9 @@ void simulation(GameModel* model, float passed_time)
 	
 
 	//Close the game if the snake is dead.
-	if (eaten_element == snake_head || eaten_element == snake_part || eaten_element == snake_tail)
+	if (eaten_element == snake_head || eaten_element == snake_part || eaten_element == snake_tail || eaten_element == trap)
 	{
-		
-		printf("END\n");
-		system("pause");
+		model->stopped = true;
 	}
 
 	update_map(model);

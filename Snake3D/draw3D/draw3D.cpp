@@ -72,11 +72,9 @@ mat4 change_camera(GameModel* model, float passed_time) {
 		}
 	}
 
-
-
 	V = lookAt( //Wylicz macierz widoku
-		vec3(x_shift + model->size  - model->head_visible_position[1], model->size , y_shift + model->head_visible_position[0]),
-		vec3(model->size - model->head_visible_position[1]  , 1.0f, model->head_visible_position[0]),
+		vec3(x_shift + shift_value  - model->head_visible_position[1], 0.5 * shift_value , y_shift + model->head_visible_position[0]),
+		vec3(-x_shift + shift_value - model->head_visible_position[1]  , 1.0f, -y_shift + model->head_visible_position[0]),
 		vec3(0.0f, 1.0f, 0.0f));
 
 	return V;
@@ -137,20 +135,28 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 		0,1,1,	0,1,1,	0,1,1,	0,1,1,
 	};
 	float myCubeColors3[] = {
-		0,0,1,	0,0,1,	0,0,1,	0,0,1,
-		0,1,1,	0,0,1,	0,0,1,	0,0,1,
-		1,1,0, 1,1,0, 1,1,0, 1,1,0,
-		0,0,1,	0,0,1,	0,1,1,	0,0,1,
-		0,0,1,	0,1,1,	0,0,1,	0,0,1,
-		0,0,1,	0,0,1,	0,0,1,	0,0,1,
+		1,1,1,	1,1,1,	1,1,1,	1,1,1,
+		1,1,1,	1,1,1,	1,1,1,	1,1,1,
+		1,1,1, 1,1,1, 1,1,1, 1,1,1,
+		1,1,1,	1,1,1,	1,1,1,	1,1,1,
+		1,1,1,	1,1,1,	1,1,1,	1,1,1,
+		1,1,1,	1,1,1,	1,1,1,	1,1,1,
 	};
 	float myCubeColors4[] = {
-		0,0,1,	0,0,1,	0,0,1,	0,0,1,
-		0,1,1,	0,0,1,	0,0,1,	0,0,1,
-		1,1,0, 1,1,0, 1,1,0, 1,1,0,
-		0,0,1,	0,0,1,	0,1,1,	0,0,1,
-		0,0,1,	0,1,1,	0,0,1,	1,0,1,
-		0,0,1,	0,0,1,	0,0,1,	1,0,1,
+		0,0,0,	0,0,0,	0,0,0,	0,0,0,
+		0,0,0,	0,0,0,	0,0,0,	0,0,0,
+		0,0,0, 0,0,0, 0,0,0, 0,0,0,
+		0,0,0,	0,0,0,	0,0,0,	0,0,0,
+		0,0,0,	0,0,0,	0,0,0,	0,0,0,
+		0,0,0,	0,0,0,	0,0,0,	0,0,0,
+	};
+	float myCubeColors5[] = {
+		0.75,0.75,0,	0.75,0.75,0, 0.75,0.75,0, 0.75,0.75,0,
+		0.75,0.75,0,	0.75,0.75,0, 0.75,0.75,0, 0.75,0.75,0,
+		0.75,0.75,0,    0.75,0.75,0, 0.75,0.75,0, 0.75,0.75,0,
+		0.75,0.75,0,	0.75,0.75,0, 0.75,0.75,0, 0.75,0.75,0,
+		0.75,0.75,0,	0.75,0.75,0, 0.75,0.75,0, 0.75,0.75,0,
+		0.75,0.75,0,	0.75,0.75,0, 0.75,0.75,0, 0.75,0.75,0
 	};
 	//Tablica wspó³rzêdnych wierzcho³ków
 	float smallQuadVertices[] = {
@@ -180,6 +186,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 		0,0,1,
 		0,0,1,
 	};
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Wyczyœæ bufor kolorów (czyli przygotuj "p³ótno" do rysowania)
 
 														//***Przygotowanie do rysowania****
@@ -192,6 +199,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+
 
 	//Update visible coordinates of the snake
 	//Calculate visible position
@@ -208,13 +216,14 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	// Draw the scene in 3D. 
 	mat4 M;
 	mat4 V;
+
 	V = change_camera(model, passed_time);
 
 	//Draw the floor
 	M = mat4(scale_value);
 	float tr = 0.5 * (float)(model->size + 1);// *(float)model->size;
-	M = translate(M, vec3(tr, 0.0f, tr - 1.0f));
-	M = scale(M, vec3(model->size, model->size, model->size));
+	M = translate(M, vec3(tr, -0.5f, tr - 1.0f));
+	M = scale(M, vec3(model->size, 1.0f, model->size));
 	glLoadMatrixf(value_ptr(V*M));
 	glVertexPointer(3, GL_FLOAT, 0, smallQuadVertices); //Ustaw tablicê myCubeVertices jako tablicê wierzcho³ków
 	glColorPointer(3, GL_FLOAT, 0, smallQuadColorsRed); 	//Change color to floor color
@@ -225,30 +234,47 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	{
 		for (int x = 0; x < model->size; x++)
 		{
-			//Compute and load model matrix
-			M = mat4(scale_value);
-			M = translate(M, vec3(model->size *scale_value -x*scale_value, 0.0f, y*scale_value));
-			glLoadMatrixf(value_ptr(V*M));
-
-			//Draw elements (exept for snake's head and tail)
 			if (model->elements[y][x] == empty) {
-				glColorPointer(3, GL_FLOAT, 0, smallQuadColorsRed);
+				//We don't have to draw anything, so skip this step of the loop due to optimisation
+				continue;
 			}
-			else if (model->elements[y][x] == fodder) {
-				glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-				glColorPointer(3, GL_FLOAT, 0, myCubeColors);
-				glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
-			}
-			else if (model->elements[y][x] == snake_part || model->elements[y][x] == snake_tail) {
+			else {
+				//Compute and load model matrix
+				M = mat4(scale_value);
+				M = translate(M, vec3(model->size *scale_value - x*scale_value, 0.0f, y*scale_value));
+				glLoadMatrixf(value_ptr(V*M));
 
-				glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-				glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
-				glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
-			}
+				//Draw elements (exept for snake's head and tail)
+				if (model->elements[y][x] == fodder) {
+					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
+					glColorPointer(3, GL_FLOAT, 0, myCubeColors);
+					glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+				}
+				else if (model->elements[y][x] == trap) {
+					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
+					glColorPointer(3, GL_FLOAT, 0, myCubeColors4);
+					glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+				}
+				else if (model->elements[y][x] == speed_boost) {
 
+					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
+					glColorPointer(3, GL_FLOAT, 0, myCubeColors3);
+					glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+				}
+				else if (model->elements[y][x] == slow_boost) {
+					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
+					glColorPointer(3, GL_FLOAT, 0, myCubeColors5);
+					glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+				}
+				else if (model->elements[y][x] == snake_part || model->elements[y][x] == snake_tail) {
+
+					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
+					glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
+					glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+				}
+			}
 		}
 	}
-
 
 	//Draw snake's head
 	M = mat4(scale_value);
@@ -256,7 +282,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	glLoadMatrixf(value_ptr(V*M));
 
 	glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-	glColorPointer(3, GL_FLOAT, 0, myCubeColors3);
+	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
 	glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
 
 	//Draw snake's tail
@@ -265,9 +291,8 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	glLoadMatrixf(value_ptr(V*M));
 
 	glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-	glColorPointer(3, GL_FLOAT, 0, myCubeColors4);
+	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
 	glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
-
 
 	//Cleanup
 	glDisableClientState(GL_VERTEX_ARRAY);

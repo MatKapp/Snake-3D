@@ -14,6 +14,7 @@
 #include "simulation/simulation.h"
 #include "draw2D/draw2D.h"
 #include "draw3D/draw3D.h"
+#include <Windows.h>
 
 
 using namespace glm;
@@ -29,6 +30,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (action == GLFW_PRESS)
 	{
+		if (key == GLFW_KEY_ENTER) {
+			if (model->stopped) {
+				//Restart the game
+				model = new GameModel();
+			}
+		}
+
 		if (key == GLFW_KEY_RIGHT)
 		{
 			//model->direction_request = right;
@@ -127,8 +135,8 @@ int main(int argc, char** argv)
 {
 	
 	//Hide console window.
-	//HWND hWnd = GetConsoleWindow();
-	//ShowWindow(hWnd, SW_HIDE);
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow(hWnd, SW_HIDE);
 
 	//Variable definition
 	GLFWwindow* minimap_window; //Pointer to a minimap
@@ -151,17 +159,20 @@ int main(int argc, char** argv)
 	float passed_time = 0;
 	glfwSetTime(0.0f);
 	while (!glfwWindowShouldClose(minimap_window)){
-		passed_time = glfwGetTime();
-		// Rysowanie gry i nak³adanie na obraz minimapy
-		drawGame(minimap_window, model, passed_time);
-		//drawMinimap(minimap_window, model);
-		glfwSwapBuffers(minimap_window); //Przerzuæ tylny bufor na przedni
+		//Execute when the game is not stopped
+		 if (!model->stopped) {
+			passed_time = glfwGetTime();
+			// Rysowanie gry i nak³adanie na obraz minimapy
+			drawGame(minimap_window, model, passed_time);
+			drawMinimap(minimap_window, model);
+			glfwSwapBuffers(minimap_window); //Przerzuæ tylny bufor na przedni
 
-		//Simulate changes in game every 1 second.
-		passed_time = glfwGetTime();
-		if (passed_time > model->timeout) {
-			simulation(model, passed_time);
-			glfwSetTime(0.0f);
+			//Simulate changes in game every 1 second.
+			passed_time = glfwGetTime();
+			if (passed_time > model->timeout) {
+				simulation(model, passed_time);
+				glfwSetTime(0.0f);
+			}
 		}
 		
 		glfwPollEvents(); //Wykonaj procedury callback w zaleznoœci od zdarzeñ jakie zasz³y.
