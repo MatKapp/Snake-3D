@@ -23,7 +23,7 @@ GameModel::GameModel()
 	max_slow_boosts = 1;
 	slow_boost_probability = 0.05;
 
-	timeout = 0.4;
+	timeout = 0.2;
 
 	//Create the initial table.
 	for (int i = 0; i < size; i++) {

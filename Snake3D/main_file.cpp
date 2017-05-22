@@ -115,6 +115,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
 	glEnable(GL_LIGHT1); //W³¹cz zerowe Ÿród³o œwiat³a
+	
 	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie bufora g³êbokoœci
 	glEnable(GL_COLOR_MATERIAL); //W³¹cz œledzenie kolorów przez materia³
 
@@ -163,8 +164,12 @@ int main(int argc, char** argv)
 		 if (!model->stopped) {
 			passed_time = glfwGetTime();
 			// Rysowanie gry i nak³adanie na obraz minimapy
+			
 			drawGame(minimap_window, model, passed_time);
 			drawMinimap(minimap_window, model);
+			
+			
+			
 			glfwSwapBuffers(minimap_window); //Przerzuæ tylny bufor na przedni
 
 			//Simulate changes in game every 1 second.

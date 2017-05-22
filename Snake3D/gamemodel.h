@@ -2,7 +2,7 @@
 #define gamemodel_H
 #include <list>
 
-#define SIZE 30
+#define SIZE 70
 enum Direction { up=0, right=1, down=2, left=3 };
 enum Element { snake_head, snake_tail, snake_part, fodder, empty, trap, speed_boost, slow_boost};
 struct A {

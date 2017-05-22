@@ -63,34 +63,37 @@ float smallQuadColorsYellow[] = {
 
 //Procedura rysuj¹ca zawartoœæ sceny
 void drawMinimap(GLFWwindow* window, GameModel* model) {
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************l
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Wyczyœæ bufor kolorów (czyli przygotuj "p³ótno" do rysowania)
 
 													//***Przygotowanie do rysowania****
-	mat4 P = perspective(50.0f*PI / 180.0f, aspect, 1.0f, 50.0f); //Wylicz macierz rzutowania P
+	mat4 P = perspective(50.0f*PI / 180.0f, aspect, 1.0f, 100.0f); //Wylicz macierz rzutowania P
 	mat4 V = lookAt( //Wylicz macierz widoku
-		vec3(0.0f, 0.0f, 1.2 * (float)model->size),		// observer
-		vec3(0.0f, 0.0f, 0.0f),							//center
+		vec3(-1.7f, -1.7f, 6.0f),		// observer		// empirycznie dobrane dane w celu drukowania minimapki w prawym górnym rogu
+		vec3(-1.7f, -1.7f, 0.0f),							//center
 		vec3(0.0f, 1.0f, 0.0f));						//nose vector
 	mat4 M;
-	float size_coeficient = 35.f / (float)(model->size);
-	float scale_value = 0.15f * size_coeficient;
-	float offset = 90.0 /  size_coeficient;
+	
+	
+	float scale_value = 1.0f/model->size;
 	glMatrixMode(GL_PROJECTION); //W³¹cz tryb modyfikacji macierzy rzutowania
 	glLoadMatrixf(value_ptr(P)); //Za³aduj macierz rzutowania
 	glMatrixMode(GL_MODELVIEW);  //W³¹cz tryb modyfikacji macierzy model-widok
 						 //***Rysowanie modelu***
 								 //1. Wyliczenie i za³adowanie macierzy model-widok
 	
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
+	
 	
 	//Draw the floor
 	M = mat4(1.0f);
-	M = scale(M, vec3(scale_value));
-	M = translate(M, vec3(offset + 0.5 * model->size, offset + 0.5 * model->size,  -1.0f));	//Floor is under tales so z = -1
-	M = scale(M, vec3(model->size));
+	M = translate(M, vec3( 0.5f, 0.5f, -0.00001f));  // na pocz¹tek ukadu wspó³rzêdnych
+	
+	
+	
+	
 	glLoadMatrixf(value_ptr(V*M));
 	glVertexPointer(3, GL_FLOAT, 0, smallQuadVertices); //Ustaw tablicê myCubeVertices jako tablicê wierzcho³ków
 	glColorPointer(3, GL_FLOAT, 0, smallQuadColorsRed); 	//Change color to floor color
@@ -101,8 +104,7 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 	{
 		for (int x = 0; x < model->size; x++)
 		{
-			//float grid = 0.065*(float) model->size;            // grid ustawia szerokoœæ czarnych lini na minimapce dobrane empirycznie
-			
+				
 			if (model->elements[y][x] == empty) {
 				continue;
 			}
@@ -131,8 +133,9 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 				}
 
 				M = mat4(1.0f);
+				M = translate(M, vec3( x*scale_value,  y*scale_value, 0));
 				M = scale(M, vec3(scale_value));
-				M = translate(M, vec3(offset + x, offset + y, 0.0f));
+				
 				glLoadMatrixf(value_ptr(V*M));
 			
 				glVertexPointer(3, GL_FLOAT, 0, smallQuadVertices); //Ustaw tablicê myCubeVertices jako tablicê wierzcho³ków
@@ -145,5 +148,5 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 	glDisableClientState(GL_COLOR_ARRAY);
 
 
-	//glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni
+	
 }

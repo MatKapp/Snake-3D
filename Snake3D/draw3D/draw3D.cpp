@@ -71,7 +71,7 @@ mat4 change_camera(GameModel* model, float passed_time) {
 			x_shift += shift_value * sinus;
 		}
 	}
-
+	
 	V = lookAt( //Wylicz macierz widoku
 		vec3(x_shift + shift_value  - model->head_visible_position[1], 0.5 * shift_value , y_shift + model->head_visible_position[0]),
 		vec3(-x_shift + shift_value - model->head_visible_position[1]  , 1.0f, -y_shift + model->head_visible_position[0]),
@@ -289,14 +289,16 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	M = mat4(scale_value);
 	M = translate(M, vec3(model->size *scale_value - model->tail_visible_position[1] * scale_value, 0.0f, model->tail_visible_position[0] * scale_value));
 	glLoadMatrixf(value_ptr(V*M));
-
+	
 	glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
 	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
 	glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
 
 	//Cleanup
+	/*
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+	*/
 };
 
 	
