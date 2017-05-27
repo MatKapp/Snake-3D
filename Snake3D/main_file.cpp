@@ -14,6 +14,7 @@
 #include "simulation/simulation.h"
 #include "draw2D/draw2D.h"
 #include "draw3D/draw3D.h"
+#include <lodepng.h>
 #include <Windows.h>
 
 
@@ -116,6 +117,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
 	glEnable(GL_LIGHT1); //W³¹cz zerowe Ÿród³o œwiat³a
 	
+
 	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie bufora g³êbokoœci
 	glEnable(GL_COLOR_MATERIAL); //W³¹cz œledzenie kolorów przez materia³
 
@@ -135,6 +137,12 @@ void initOpenGLProgram(GLFWwindow* window) {
 int main(int argc, char** argv) 
 {
 	
+	
+
+
+
+
+
 	//Hide console window.
 	HWND hWnd = GetConsoleWindow();
 	ShowWindow(hWnd, SW_HIDE);

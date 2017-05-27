@@ -148,6 +148,11 @@
   <ItemGroup>
     <ClCompile Include="draw2D\draw2D.cpp" />
     <ClCompile Include="draw3D\draw3D.cpp" />
+    <ClCompile Include="figures\cube.cpp" />
+    <ClCompile Include="figures\detailed_cube.cpp" />
+    <ClCompile Include="figures\model.cpp" />
+    <ClCompile Include="figures\sphere.cpp" />
+    <ClCompile Include="figures\teapot.cpp" />
     <ClCompile Include="main_file.cpp" />
     <ClCompile Include="gamemodel.cpp" />
     <ClCompile Include="simulation\simulation.cpp" />
@@ -158,7 +163,15 @@
   <ItemGroup>
     <ClInclude Include="draw2D\draw2D.h" />
     <ClInclude Include="draw3D\draw3D.h" />
+    <ClInclude Include="figures\allmodels.h" />
+    <ClInclude Include="figures\cube.h" />
+    <ClInclude Include="figures\detailed_cube.h" />
+    <ClInclude Include="figures\model.h" />
+    <ClInclude Include="figures\sphere.h" />
+    <ClInclude Include="figures\teapot.h" />
     <ClInclude Include="gamemodel.h" />
+    <ClInclude Include="MyCube.h" />
+    <ClInclude Include="piston.h" />
     <ClInclude Include="simulation\simulation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
