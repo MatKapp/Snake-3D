@@ -2,13 +2,34 @@
 #include <cmath>
 #include "apple.h"
 #include "../MyCube.h"
-#include "../pikachu.h"
+#include "../pikachu2.h"
 #include "../bomb.h"
+#include "lodepng.h"
+
+
+
+
+
 using namespace glm;
 float scale_value = 1.0f;
 float scale_value2 = 1.0f;
 
+GLuint tex; //Globalnie
+void lode_png_to_memory(char* path) {
+	//Wczytanie do pamiêci komputera
+	std::vector<unsigned char> image;   //Alokuj wektor do wczytania obrazka
+	unsigned width, height;   //Zmienne do których wczytamy wymiary obrazka
+							  //Wczytaj obrazek
+	unsigned error = lodepng::decode(image, width, height, path);
 
+	//Import do pamiêci karty graficznej
+	glGenTextures(1, &tex); //Zainicjuj jeden uchwyt
+	glBindTexture(GL_TEXTURE_2D, tex); //Uaktywnij uchwyt
+									   //Wczytaj obrazek do pamiêci KG skojarzonej z uchwytem
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0,GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*)image.data());
+
+
+}
 
 
 
@@ -194,27 +215,32 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 
 				//Draw elements (exept for snake's head and tail)
 				if (elements[y][x] == fodder) {
-					glDisableClientState(GL_COLOR_ARRAY);
+					lode_png_to_memory("apple");
+
+
+
+					glDisableClientState(GL_COLOR_MATERIAL);
 					glEnableClientState(GL_NORMAL_ARRAY);
-					glEnableClientState(GL_COLOR_MATERIAL);
-					glColor3d(1.0f, 0.0f, 0.0f);
-			
+					glBindTexture(GL_TEXTURE_2D, tex);
+					glEnableClientState(GL_VERTEX_ARRAY);
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					
+
 					M2 = mat4(1.0f);
-					
 					M2 = translate(M2, vec3(-0.75, -0.5, 0.0));
-					
 					M2 = translate(M2, vec3(model_size *scale_value - x*scale_value, 0.0f, y*scale_value));
 					M2 = scale(M2, vec3(0.0125, 0.0250, 0.0125));
-					
 					glLoadMatrixf(value_ptr(V*M2));
 
 					glNormalPointer(GL_FLOAT, 0, appleNormals);
 					glVertexPointer(3, GL_FLOAT, 0, applePositions);
+					glTexCoordPointer(3, GL_FLOAT, 0, appleTexels);
 					glDrawArrays(GL_TRIANGLES, 0, appleVertices);
+					
 					glDisableClientState(GL_NORMAL_ARRAY);
-					glDisableClientState(GL_COLOR_MATERIAL);
 					glEnableClientState(GL_COLOR_ARRAY);
-				}
+					glDisableClientState(GL_TEXTURE_COORD_ARRAY);   }
+					
 				else if (elements[y][x] == trap) {
 					glDisableClientState(GL_COLOR_ARRAY);
 					glEnableClientState(GL_NORMAL_ARRAY);
@@ -238,14 +264,14 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 					glEnableClientState(GL_COLOR_ARRAY);
 				}
 				else if (elements[y][x] == speed_boost) {
-
-					glDisableClientState(GL_COLOR_ARRAY);
-					glEnableClientState(GL_NORMAL_ARRAY);
-					glEnableClientState(GL_COLOR_MATERIAL);
-
+					lode_png_to_memory("5187abc5");
+					glEnableClientState(GL_VERTEX_ARRAY);
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					//glVertexPointer(3, GL_FLOAT, 0, pikachuPositions);
+					glTexCoordPointer(3, GL_FLOAT, 0, pikachu2Texels);
 
 					M2 = mat4(1.0f);
-					glColor3d(1.0f, 1.0f, 0.0f);
+					//glColor3d(1.0f, 1.0f, 0.0f);
 					//M2 = translate(M2, vec3(-0.75, -0.5, 0.0));
 
 					M2 = translate(M2, vec3(model_size *scale_value - x*scale_value, 0.0f, y*scale_value));
@@ -253,12 +279,14 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 
 					glLoadMatrixf(value_ptr(V*M2));
 
-					glNormalPointer(GL_FLOAT, 0, pikachuNormals);
-					glVertexPointer(3, GL_FLOAT, 0, pikachuPositions);
-					glDrawArrays(GL_TRIANGLES, 0, pikachuVertices);
+					glNormalPointer(GL_FLOAT, 0, pikachu2Normals);
+					glVertexPointer(3, GL_FLOAT, 0, pikachu2Positions);
+					glDrawArrays(GL_TRIANGLES, 0, pikachu2Vertices);
 					glDisableClientState(GL_NORMAL_ARRAY);
-					glDisableClientState(GL_COLOR_MATERIAL);
+				//	glDisableClientState(GL_COLOR_MATERIAL);
 					glEnableClientState(GL_COLOR_ARRAY);
+					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+					glDisable(GL_NORMALIZE);
 				}
 				else if (elements[y][x] == slow_boost) {
 					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);

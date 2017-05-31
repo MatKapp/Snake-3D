@@ -14,7 +14,7 @@
 #include "simulation/simulation.h"
 #include "draw2D/draw2D.h"
 #include "draw3D/draw3D.h"
-#include <lodepng.h>
+
 #include <Windows.h>
 
 
@@ -114,12 +114,16 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	glClearColor(0, 0, 0, 1); //Ustaw kolor czyszczenia ekranu
 
-	glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
-	glEnable(GL_LIGHT1); //W³¹cz zerowe Ÿród³o œwiat³a
+	//glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
+	//glEnable(GL_LIGHT1); //W³¹cz zerowe Ÿród³o œwiat³a
 	
 
-	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie bufora g³êbokoœci
-	glEnable(GL_COLOR_MATERIAL); //W³¹cz œledzenie kolorów przez materia³
+
+	
+	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie budora g³êbokoœci
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_TEXTURE_2D); // wlaczenie teksturowania
+
 
 	//Set attributes for window.
 

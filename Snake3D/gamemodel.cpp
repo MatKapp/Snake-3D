@@ -17,8 +17,8 @@ GameModel::GameModel()
 	max_traps = 8;
 	trap_probability = 0.02;
 	speed_boosts = 0;
-	max_speed_boosts = 1;
-	speed_boost_probability = 0.05;
+	max_speed_boosts = 10;
+	speed_boost_probability = 0.20;
 	slow_boosts = 0;
 	max_slow_boosts = 1;
 	slow_boost_probability = 0.05;

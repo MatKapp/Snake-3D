@@ -153,6 +153,7 @@
     <ClCompile Include="figures\model.cpp" />
     <ClCompile Include="figures\sphere.cpp" />
     <ClCompile Include="figures\teapot.cpp" />
+    <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main_file.cpp" />
     <ClCompile Include="gamemodel.cpp" />
     <ClCompile Include="simulation\simulation.cpp" />
