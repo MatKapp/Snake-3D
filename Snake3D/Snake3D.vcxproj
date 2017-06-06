@@ -162,6 +162,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="apple.h" />
     <ClInclude Include="draw2D\draw2D.h" />
     <ClInclude Include="draw3D\draw3D.h" />
     <ClInclude Include="figures\allmodels.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="figures\sphere.h" />
     <ClInclude Include="figures\teapot.h" />
     <ClInclude Include="gamemodel.h" />
+    <ClInclude Include="lodepng.h" />
     <ClInclude Include="MyCube.h" />
     <ClInclude Include="piston.h" />
     <ClInclude Include="simulation\simulation.h" />

@@ -65,11 +65,7 @@ float smallQuadColorsYellow[] = {
 void drawMinimap(GLFWwindow* window, GameModel* model) {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-	//************Tutaj umieszczaj kod rysuj¹cy obraz******************l
-
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Wyczyœæ bufor kolorów (czyli przygotuj "p³ótno" do rysowania)
-
-													//***Przygotowanie do rysowania****
+	
 	mat4 P = perspective(50.0f*PI / 180.0f, aspect, 1.0f, 100.0f); //Wylicz macierz rzutowania P
 	mat4 V = lookAt( //Wylicz macierz widoku
 		vec3(-1.7f, -1.7f, 6.0f),		// observer		// empirycznie dobrane dane w celu drukowania minimapki w prawym górnym rogu

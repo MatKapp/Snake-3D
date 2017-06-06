@@ -1,22 +1,37 @@
 #pragma once
 
-
-#ifndef SMALL_QUAD_H
-#define SMALL_QUAD_H
-
-#include <vector>
-#include <glm/glm.hpp>
-#include <GLFW/glfw3.h>
-
-
-#pragma once
-
-
 //Tablica wspó³rzêdnych wierzcho³ków
-float smallQuadVertices[];
+float smallQuadVertices[] = {
+	-0.5,0, -0.5,
+	0.5,0 ,-0.5,
+	0.5,0, 0.5,
+	-0.5,0, 0.5,
+};
 //Tablica kolorów wierzcho³ków
-float smallQuadColors[];
+float smallQuadColorsRed[] = {
+	1,0,0,
+	1,0,0,
+	1,0,0,
+	1,0,0
+};
 
+float smallQuadColorsGreen[] = {
+	0,1 ,0,
+	0,1,0,
+	0,1,0,
+	0,1,0,
+};
 
-#endif
+float smallQuadColorsBlue[] = {
+	0,0,1,
+	0,0,1,
+	0,0,1,
+	0,0,1,
+};
 
+float smallQuadColorsGrass[] = {
+	0.196f, 0.804f, 0.196f,
+	0.196f, 0.804f, 0.196f,
+	0.196f, 0.804f, 0.196f,
+	0.196f, 0.804f, 0.196f,
+};

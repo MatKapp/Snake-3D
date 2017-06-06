@@ -122,7 +122,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	
 	glEnable(GL_DEPTH_TEST); //W³¹cz u¿ywanie budora g³êbokoœci
 	glEnable(GL_NORMALIZE);
-	glEnable(GL_TEXTURE_2D); // wlaczenie teksturowania
+	
 
 
 	//Set attributes for window.
