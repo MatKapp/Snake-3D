@@ -23,6 +23,13 @@ float smallQuadColorsRed[] = {
 	1,0,0,
 	1,0,0
 };
+float smallQuadNormals[] = {
+	0.0f, 0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 1.0f, 0.0f
+
+};
 
 float smallQuadColorsGreen[] = {
 	0,1,0,
@@ -65,6 +72,7 @@ float smallQuadColorsYellow[] = {
 void drawMinimap(GLFWwindow* window, GameModel* model) {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 	
 	mat4 P = perspective(50.0f*PI / 180.0f, aspect, 1.0f, 100.0f); //Wylicz macierz rzutowania P
 	mat4 V = lookAt( //Wylicz macierz widoku
@@ -93,6 +101,7 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 	glLoadMatrixf(value_ptr(V*M));
 	glVertexPointer(3, GL_FLOAT, 0, smallQuadVertices); //Ustaw tablicê myCubeVertices jako tablicê wierzcho³ków
 	glColorPointer(3, GL_FLOAT, 0, smallQuadColorsRed); 	//Change color to floor color
+	glNormalPointer(GL_FLOAT, 0, smallQuadNormals);
 	glDrawArrays(GL_QUADS, 0, 4);
 
 	// Draw squares
@@ -142,6 +151,7 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 									  //Posprz¹taj po sobie
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 
 
 	

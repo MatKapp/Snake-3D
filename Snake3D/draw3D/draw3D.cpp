@@ -15,6 +15,7 @@ float scale_value = 1.0f;
 float scale_value2 = 1.0f;
 
 GLuint bomb_tex;
+GLuint grass_tex;
 GLuint pikachu_tex;
 GLuint slow_boost_tex;
 GLuint apple_tex; //Globalnie
@@ -148,24 +149,25 @@ void init_3D_drawing()
 {
 	pikachu_tex = readTexture("5187abc5.png");
 	apple_tex = readTexture("skin.png");
-	//lode_png_to_memory("5187abc5", &apple_tex);
-	//lode_png_to_memory("5187abc5", &pikachu_tex);
-	//slow_boost__tex = readTexture("bricks");
+	bomb_tex = readTexture("bomb.png");
+	grass_tex = readTexture("grass.png");
 }
 	
 
 
 
 void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
-	unsigned int myCubeVertexCount = 24;
+	unsigned int myCubeVertexCount = 36;
 	int model_size = model->size;
 	auto elements = model->elements;
 	//Tablica wspó³rzêdnych wierzcho³ków
 	float smallQuadVertices[] = {
-		-0.5,0, -0.5,
-		0.5,0 ,-0.5,
-		0.5,0, 0.5,
-		-0.5,0, 0.5,
+		0.5, 0, 0.5,
+		-0.5, 0, -0.5,
+		-0.5, 0, 0.5,
+		0.5, 0, 0.5,
+		0.5, 0, -0.5,
+		-0.5, 0, -0.5,
 	};
 	//Tablica kolorów wierzcho³ków
 	float smallQuadColorsRed[] = {
@@ -188,8 +190,28 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 		0,0,1,
 		0,0,1,
 	};
+	float smallQuadNormals[] =
+	{
+		0, 1, 0,
+		0, 1, 0,
+		0, 1, 0,
+		0, 1, 0,
+		0, 1, 0,
+		0, 1, 0,
+	};
+	float smallQuadTexels[] =
+	{
+		1, 1,
+		0, 0,
+		1, 0,
+		1, 1,
+		0, 1,
+		0, 0,
+	};
 
 	float smallQuadColorsGrass[] = {
+		0.196f, 0.804f, 0.196f,
+		0.196f, 0.804f, 0.196f,
 		0.196f, 0.804f, 0.196f,
 		0.196f, 0.804f, 0.196f,
 		0.196f, 0.804f, 0.196f,
@@ -227,20 +249,28 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	V = change_camera(model, passed_time);
 
 	//Draw the floor
-
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glBindTexture(GL_TEXTURE_2D, grass_tex);
+
+
 	M = mat4(scale_value);
 	float tr = 0.5 * (float)( model_size + 1);// *(float) model_size;
 	M = translate(M, vec3(tr, -0.5f, tr - 1.0f));
 	M = scale(M, vec3( model_size, 1.0f,  model_size));
 	glLoadMatrixf(value_ptr(V*M));
 	glVertexPointer(3, GL_FLOAT, 0, smallQuadVertices); //Ustaw tablicê smallQuadVertices jako tablicê wierzcho³ków
-	glColorPointer(3, GL_FLOAT, 0, smallQuadColorsGrass); 	//Change color to floor color
-	glDrawArrays(GL_QUADS, 0, 4);
+	
+	glNormalPointer(GL_FLOAT, 0, smallQuadNormals);
+	glTexCoordPointer(2, GL_FLOAT, 0, smallQuadTexels);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
 
 	//Don't draw the snake's head and tail.They will be drawn in another place, to anable the animation.
 	
@@ -291,10 +321,12 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 					
 				}
 				else if (elements[y][x] == trap) {
-
+					glEnable(GL_TEXTURE_2D);
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 					glEnableClientState(GL_VERTEX_ARRAY);
 					glEnableClientState(GL_COLOR_ARRAY);
-					
+					glEnableClientState(GL_NORMAL_ARRAY);
+					glBindTexture(GL_TEXTURE_2D, bomb_tex);
 					
 					M2 = mat4(1.0f);
 					M2 = translate(M2, vec3(1.25, 0.0, 0.0));
@@ -302,14 +334,16 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 					M2 = scale(M2, vec3(0.6666, 0.33333, 1.0f));
 					glLoadMatrixf(value_ptr(V*M2));
 
-
+					glNormalPointer(GL_FLOAT, 0, bombNormals);
 					glVertexPointer(3, GL_FLOAT, 0, bombPositions);
+					glTexCoordPointer(2, GL_FLOAT, 0, bombTexels);
 					glDrawArrays(GL_TRIANGLES, 0, bombVertices);
 
-
+					glDisableClientState(GL_NORMAL_ARRAY);
 					glDisableClientState(GL_VERTEX_ARRAY);
 					glDisableClientState(GL_COLOR_ARRAY);
-				
+					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+					glDisable(GL_TEXTURE_2D);
 				}
 				else if (elements[y][x] == speed_boost) {
 					glEnable(GL_TEXTURE_2D);
@@ -339,25 +373,31 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 				else if (elements[y][x] == slow_boost) {
 					glEnableClientState(GL_VERTEX_ARRAY);
 					glEnableClientState(GL_COLOR_ARRAY);
+					glEnableClientState(GL_NORMAL_ARRAY);
 
 					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
 					glColorPointer(3, GL_FLOAT, 0, myCubeColors5);
-					glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+					glNormalPointer(GL_FLOAT, 0, myCubeNormals);
+					glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
 
 					glDisableClientState(GL_VERTEX_ARRAY);
 					glDisableClientState(GL_COLOR_ARRAY);
+					glDisableClientState(GL_NORMAL_ARRAY);
 
 				}
 				else if (elements[y][x] == snake_part || elements[y][x] == snake_tail) {
+					glEnableClientState(GL_NORMAL_ARRAY);
 					glEnableClientState(GL_VERTEX_ARRAY);
 					glEnableClientState(GL_COLOR_ARRAY);
 
 					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
 					glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
-					glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+					glNormalPointer(GL_FLOAT, 0, myCubeNormals);
+					glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
 
 					glDisableClientState(GL_VERTEX_ARRAY);
 					glDisableClientState(GL_COLOR_ARRAY);
+					glDisableClientState(GL_NORMAL_ARRAY);
 					
 				}
 			}
@@ -371,10 +411,13 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	glLoadMatrixf(value_ptr(V*M));
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 
 	glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
 	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
-	glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+	glNormalPointer(GL_FLOAT, 0, myCubeNormals);
+	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
+	
 
 	//Draw snake's tail
 	M = mat4(scale_value);
@@ -383,10 +426,13 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	
 	glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
 	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
-	glDrawArrays(GL_QUADS, 0, myCubeVertexCount);
+	glNormalPointer(GL_FLOAT, 0, myCubeNormals);
+	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
+
 	
 
 	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 	//Cleanup
