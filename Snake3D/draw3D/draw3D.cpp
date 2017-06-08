@@ -143,6 +143,15 @@ mat4 change_camera(GameModel* model, float passed_time) {
 
 	return V;
 }
+
+void init_3D_drawing()
+{
+	pikachu_tex = readTexture("5187abc5.png");
+	apple_tex = readTexture("skin.png");
+	//lode_png_to_memory("5187abc5", &apple_tex);
+	//lode_png_to_memory("5187abc5", &pikachu_tex);
+	//slow_boost__tex = readTexture("bricks");
+}
 	
 
 
@@ -151,11 +160,6 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	unsigned int myCubeVertexCount = 24;
 	int model_size = model->size;
 	auto elements = model->elements;
-	//lode_png_to_memory("5187abc5", &apple_tex);
-	//lode_png_to_memory("5187abc5", &pikachu_tex);
-	pikachu_tex = readTexture("5187abc5");
-	apple_tex = readTexture("skin");
-	//slow_boost__tex = readTexture("bricks");
 	//Tablica wspó³rzêdnych wierzcho³ków
 	float smallQuadVertices[] = {
 		-0.5,0, -0.5,
@@ -202,8 +206,6 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 								 //***Rysowanie modelu***
 								 //1. Wyliczenie i za³adowanie macierzy model-widok
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
 
 
 	//Update visible coordinates of the snake
@@ -225,6 +227,9 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	V = change_camera(model, passed_time);
 
 	//Draw the floor
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 	M = mat4(scale_value);
 	float tr = 0.5 * (float)( model_size + 1);// *(float) model_size;
 	M = translate(M, vec3(tr, -0.5f, tr - 1.0f));
@@ -233,6 +238,9 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	glVertexPointer(3, GL_FLOAT, 0, smallQuadVertices); //Ustaw tablicê smallQuadVertices jako tablicê wierzcho³ków
 	glColorPointer(3, GL_FLOAT, 0, smallQuadColorsGrass); 	//Change color to floor color
 	glDrawArrays(GL_QUADS, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 
 	//Don't draw the snake's head and tail.They will be drawn in another place, to anable the animation.
 	
@@ -253,10 +261,11 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 				//Draw elements (exept for snake's head and tail)
 				if (elements[y][x] == fodder) {
 
-
+				
 					glEnable(GL_TEXTURE_2D);
 					glEnableClientState(GL_VERTEX_ARRAY);
 					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					glEnableClientState(GL_NORMAL_ARRAY);
 					
 					
 					glBindTexture(GL_TEXTURE_2D, apple_tex);
@@ -269,17 +278,22 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 
 					glTexCoordPointer(2, GL_FLOAT, 0, apple2Texels);
 					glVertexPointer(3, GL_FLOAT, 0, apple2Positions);
+
+					glNormalPointer(GL_FLOAT, 0, apple2Normals);
 					glDrawArrays(GL_TRIANGLES, 0, apple2Vertices);
 					
-					
+
+					glDisableClientState(GL_NORMAL_ARRAY);
 					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 					glDisableClientState(GL_VERTEX_ARRAY);
 					glDisable(GL_TEXTURE_2D);
+					
 					
 				}
 				else if (elements[y][x] == trap) {
 
 					glEnableClientState(GL_VERTEX_ARRAY);
+					glEnableClientState(GL_COLOR_ARRAY);
 					
 					
 					M2 = mat4(1.0f);
@@ -294,20 +308,17 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 
 
 					glDisableClientState(GL_VERTEX_ARRAY);
+					glDisableClientState(GL_COLOR_ARRAY);
 				
 				}
 				else if (elements[y][x] == speed_boost) {
-					glEnableClientState(GL_COLOR_ARRAY);
 					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D, pikachu_tex);
 					glEnableClientState(GL_VERTEX_ARRAY);
 					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 					glEnableClientState(GL_NORMAL_ARRAY);
 
-
-					
-					
-
+					glBindTexture(GL_TEXTURE_2D, pikachu_tex);
+								
 					M2 = mat4(1.0f);
 					M2 = translate(M2, vec3(model_size *scale_value - x*scale_value, 0.0f, y*scale_value));
 					M2 = scale(M2, vec3(0.0714, 0.0714, 0.25));
@@ -324,12 +335,10 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 					glDisableClientState(GL_VERTEX_ARRAY);
 					glDisable(GL_TEXTURE_2D);
-					glDisableClientState(GL_COLOR_ARRAY);
 				}
 				else if (elements[y][x] == slow_boost) {
 					glEnableClientState(GL_VERTEX_ARRAY);
 					glEnableClientState(GL_COLOR_ARRAY);
-					glEnable(GL_TEXTURE_2D);
 
 					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
 					glColorPointer(3, GL_FLOAT, 0, myCubeColors5);

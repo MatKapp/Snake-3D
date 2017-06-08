@@ -16,5 +16,6 @@
 
 
 void drawGame(GLFWwindow* window, GameModel *model, float passed_time);
+void init_3D_drawing();
 	
 #endif

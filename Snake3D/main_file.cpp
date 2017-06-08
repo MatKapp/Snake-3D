@@ -114,8 +114,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	glClearColor(0, 0, 0, 1); //Ustaw kolor czyszczenia ekranu
 
-	//glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
-	//glEnable(GL_LIGHT1); //W³¹cz zerowe Ÿród³o œwiat³a
+	glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
+	glEnable(GL_LIGHT0); //W³¹cz zerowe Ÿród³o œwiat³a
 	
 
 
@@ -140,13 +140,6 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 int main(int argc, char** argv) 
 {
-	
-	
-
-
-
-
-
 	//Hide console window.
 	HWND hWnd = GetConsoleWindow();
 	ShowWindow(hWnd, SW_HIDE);
@@ -166,7 +159,7 @@ int main(int argc, char** argv)
 
 	//Set buffer moder, color, light and handle callbacks.
 	initOpenGLProgram(minimap_window);
-	
+	init_3D_drawing();
 	
 	//Game loop
 	float passed_time = 0;
