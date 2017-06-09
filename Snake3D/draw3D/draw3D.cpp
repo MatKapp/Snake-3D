@@ -5,6 +5,7 @@
 #include "../pikachu2.h"
 #include "../bomb.h"
 #include "../lodepng.h"
+#include "../mySnail.h"
 
 
 
@@ -17,7 +18,7 @@ float scale_value2 = 1.0f;
 GLuint bomb_tex;
 GLuint grass_tex;
 GLuint pikachu_tex;
-GLuint slow_boost_tex;
+GLuint my_snail_tex;
 GLuint apple_tex; //Globalnie
 void lode_png_to_memory(char* path, GLuint* tex) {
 	//Wczytanie do pamiêci komputera
@@ -151,6 +152,7 @@ void init_3D_drawing()
 	apple_tex = readTexture("skin.png");
 	bomb_tex = readTexture("bomb.png");
 	grass_tex = readTexture("grass.png");
+	my_snail_tex = readTexture("snail.png");
 }
 	
 
@@ -371,18 +373,21 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 					glDisable(GL_TEXTURE_2D);
 				}
 				else if (elements[y][x] == slow_boost) {
+					glEnable(GL_TEXTURE_2D);
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 					glEnableClientState(GL_VERTEX_ARRAY);
-					glEnableClientState(GL_COLOR_ARRAY);
 					glEnableClientState(GL_NORMAL_ARRAY);
+					glBindTexture(GL_TEXTURE_2D, my_snail_tex);
 
-					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-					glColorPointer(3, GL_FLOAT, 0, myCubeColors5);
-					glNormalPointer(GL_FLOAT, 0, myCubeNormals);
-					glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
+					glVertexPointer(3, GL_FLOAT, 0, mySnailPositions);
+					glNormalPointer(GL_FLOAT, 0, mySnailNormals);
+					glTexCoordPointer(3, GL_FLOAT, 0, mySnailTexels);
+					glDrawArrays(GL_TRIANGLES, 0, mySnailVertices);
 
 					glDisableClientState(GL_VERTEX_ARRAY);
-					glDisableClientState(GL_COLOR_ARRAY);
 					glDisableClientState(GL_NORMAL_ARRAY);
+					glDisable(GL_TEXTURE_2D);
+					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 				}
 				else if (elements[y][x] == snake_part || elements[y][x] == snake_tail) {
