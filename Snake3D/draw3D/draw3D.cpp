@@ -7,9 +7,11 @@
 #include "../MyCube.h"
 #include "../pikachu2.h"
 #include "../bomb.h"
+#include "../sphere.h"
 #include "../lodepng.h"
 #include "../mySnail.h"
 #include "../cone.h"
+#include "../walec.h"
 
 
 using namespace glm;
@@ -21,6 +23,7 @@ GLuint grass_tex;
 GLuint pikachu_tex;
 GLuint my_snail_tex;
 GLuint blur_tex;
+GLuint sand_tex;
 GLuint apple_tex; //Globalnie
 void lode_png_to_memory(char* path, GLuint* tex) {
 	//Wczytanie do pamiêci komputera
@@ -156,6 +159,7 @@ void init_3D_drawing()
 	grass_tex = readTexture("grass.png");
 	my_snail_tex = readTexture("snail.png");
 	blur_tex = readTexture("blur.png");
+	sand_tex = readTexture("sand.png");
 }
 	
 void drawSnail()
@@ -280,7 +284,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
-	glBindTexture(GL_TEXTURE_2D, grass_tex);
+	glBindTexture(GL_TEXTURE_2D, sand_tex);
 
 	//Draw the floor
 	float model_size_bigger = 2 * model_size;
@@ -409,28 +413,15 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 					drawSnail();
 				}
 				else if (elements[y][x] == snake_part || elements[y][x] == snake_tail) {
-					glDisableClientState(GL_VERTEX_ARRAY);
-					glDisableClientState(GL_NORMAL_ARRAY);
-					glDisable(GL_TEXTURE_2D);
-					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+					glBindTexture(GL_TEXTURE_2D, sand_tex);
 
-					glEnableClientState(GL_NORMAL_ARRAY);
-					glEnableClientState(GL_VERTEX_ARRAY);
-					glEnableClientState(GL_COLOR_ARRAY);
+					M2 = scale(M, vec3(0.5, 0.5, 1));
+					glLoadMatrixf(value_ptr(V*M2));
 
-					glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-					glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
-					glNormalPointer(GL_FLOAT, 0, myCubeNormals);
-					glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
-
-					glDisableClientState(GL_VERTEX_ARRAY);
-					glDisableClientState(GL_COLOR_ARRAY);
-					glDisableClientState(GL_NORMAL_ARRAY);
-
-					glEnable(GL_TEXTURE_2D);
-					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-					glEnableClientState(GL_VERTEX_ARRAY);
-					glEnableClientState(GL_NORMAL_ARRAY);
+					glVertexPointer(3, GL_FLOAT, 0, walecPositions);
+					glTexCoordPointer(3, GL_FLOAT, 0, walecTexels);
+					glNormalPointer(GL_FLOAT, 0, walecNormals);
+					glDrawArrays(GL_TRIANGLES, 0, walecVertices);
 				}
 
 				glDisableClientState(GL_VERTEX_ARRAY);
@@ -452,13 +443,13 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 
 	M = mat4(scale_value);
 	M = translate(M, vec3(model_size *scale_value - model->head_visible_position[1] * scale_value, 0.0f, model->head_visible_position[0] * scale_value));
-	M = scale(M, vec3(0.0714, 0.0714, 0.25));
+	//M = scale(M, vec3(0.0714, 0.0714, 0.25));
 	glLoadMatrixf(value_ptr(V*M));
 
-	glVertexPointer(3, GL_FLOAT, 0, myCubeNormals);
-	glNormalPointer(GL_FLOAT, 0, myCubeColors2);
-	glTexCoordPointer(3, GL_FLOAT, 0, myCubeTexels);
-	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
+	glVertexPointer(3, GL_FLOAT, 0, spherePositions);
+	glNormalPointer(GL_FLOAT, 0, sphereNormals);
+	glTexCoordPointer(3, GL_FLOAT, 0, sphereTexels);
+	glDrawArrays(GL_TRIANGLES, 0, sphereVertices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);

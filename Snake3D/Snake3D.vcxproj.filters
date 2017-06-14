@@ -77,9 +77,6 @@
     <ClInclude Include="figures\model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="figures\sphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="figures\teapot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +93,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="walec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
