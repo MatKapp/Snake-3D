@@ -9,9 +9,7 @@
 #include "../bomb.h"
 #include "../lodepng.h"
 #include "../mySnail.h"
-
-
-
+#include "../cone.h"
 
 
 using namespace glm;
@@ -285,10 +283,11 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	glBindTexture(GL_TEXTURE_2D, grass_tex);
 
 	//Draw the floor
+	float model_size_bigger = 2 * model_size;
 	M = mat4(scale_value);
 	float tr = 0.5 * (float)( model_size + 1);//
 	M = translate(M, vec3(tr, -0.5f, tr - 1.0f));
-	M = scale(M, vec3( model_size, 1.0f,  model_size));
+	M = scale(M, vec3( model_size_bigger, 1.0f,  model_size_bigger));
 	glLoadMatrixf(value_ptr(V*M));
 	glVertexPointer(3, GL_FLOAT, 0, smallQuadVertices); //Ustaw tablicê smallQuadVertices jako tablicê wierzcho³ków
 	glNormalPointer(GL_FLOAT, 0, smallQuadNormals);
@@ -296,41 +295,41 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	//Draw the walls
-	float model_size_bigger = 2 * model_size;
+	float h = model_size_bigger;
 	glBindTexture(GL_TEXTURE_2D, blur_tex);
 	if (model->direction != up) {
 		//Down
 		M = mat4(scale_value);
-		M = translate(M, vec3(tr, 0.0f, 0.0f));
+		M = translate(M, vec3(tr, 0.0f, -0.5f));
 		M = rotate(M, PI / 2, vec3(1, 0, 0));
-		M = scale(M, vec3(model_size_bigger, model_size_bigger, model_size_bigger));
+		M = scale(M, vec3(model_size_bigger, h, model_size_bigger));
 		glLoadMatrixf(value_ptr(V*M));
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 	if (model->direction != down) {
 		//Up
 		M = mat4(scale_value);
-		M = translate(M, vec3(tr, 0.0f, 2 * tr));
+		M = translate(M, vec3(tr, -0.0f, 2 * tr - 1.5));
 		M = rotate(M, -PI/2, vec3(1, 0, 0));
-		M = scale(M, vec3(model_size_bigger, model_size_bigger, model_size_bigger));
+		M = scale(M, vec3(model_size_bigger, h, model_size_bigger));
 		glLoadMatrixf(value_ptr(V*M));
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 	if (model->direction != right) {
 		//Left
 		M = mat4(scale_value);
-		M = translate(M, vec3(2 * tr, 0.0f, tr));
+		M = translate(M, vec3(2*tr - 0.5, 0.0f, tr));
 		M = rotate(M, PI / 2, vec3(0, 0, 1));
-		M = scale(M, vec3(model_size_bigger, model_size_bigger, model_size_bigger));
+		M = scale(M, vec3(model_size_bigger, h, model_size_bigger));
 		glLoadMatrixf(value_ptr(V*M));
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 	if (model->direction != left) {
 		//Right
 		M = mat4(scale_value);
-		M = translate(M, vec3(0.0f, 0.0f, tr));
+		M = translate(M, vec3(0.0f + 0.5, 0.0f, tr));
 		M = rotate(M, -PI/2, vec3(0, 0, 1));
-		M = scale(M, vec3(model_size_bigger, model_size_bigger, model_size_bigger));
+		M = scale(M, vec3(model_size_bigger, h, model_size_bigger));
 		glLoadMatrixf(value_ptr(V*M));
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
@@ -443,21 +442,33 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	}
 
 	//Draw snake
+	//Draw snake's head
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, pikachu_tex);
+
+	M = mat4(scale_value);
+	M = translate(M, vec3(model_size *scale_value - model->head_visible_position[1] * scale_value, 0.0f, model->head_visible_position[0] * scale_value));
+	M = scale(M, vec3(0.0714, 0.0714, 0.25));
+	glLoadMatrixf(value_ptr(V*M));
+
+	glVertexPointer(3, GL_FLOAT, 0, myCubeNormals);
+	glNormalPointer(GL_FLOAT, 0, myCubeColors2);
+	glTexCoordPointer(3, GL_FLOAT, 0, myCubeTexels);
+	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	//Draw snake's tail
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
-	//Draw snake's head
-	M = mat4(scale_value);
-
-	M = translate(M, vec3(model_size *scale_value - model->head_visible_position[1] * scale_value, 0.0f, model->head_visible_position[0] * scale_value));
-	glLoadMatrixf(value_ptr(V*M));
-
-	glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
-	glNormalPointer(GL_FLOAT, 0, myCubeNormals);
-	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
-
-	//Draw snake's tail
 	M = mat4(scale_value);
 	M = translate(M, vec3(model_size *scale_value - model->tail_visible_position[1] * scale_value, 0.0f, model->tail_visible_position[0] * scale_value));
 	glLoadMatrixf(value_ptr(V*M));
@@ -466,6 +477,10 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
 	glNormalPointer(GL_FLOAT, 0, myCubeNormals);
 	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	//int snake_length = model->snake_positions_x.size();
 	//std::list<int>::iterator x_it = model->snake_positions_x.begin();
@@ -487,10 +502,6 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 	//	glNormalPointer(GL_FLOAT, 0, myCubeNormals);
 	//	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
 	//}
-
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
 };
 
 	

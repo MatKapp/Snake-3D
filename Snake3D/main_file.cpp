@@ -116,6 +116,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	glEnable(GL_LIGHTING); //W³¹cz tryb cieniowania
 	glEnable(GL_LIGHT0); //W³¹cz zerowe Ÿród³o œwiat³a
+	float lightPos[] = { 0.5*model->size,0.5*model->size,0.5*model->size,0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 	
 
 

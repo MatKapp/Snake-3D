@@ -94,7 +94,7 @@ void drawMinimap(GLFWwindow* window, GameModel* model) {
 	
 	//Draw the floor
 	M = mat4(1.0f);
-	M = translate(M, vec3( 0.5f, 0.5f, -0.00001f));  // na pocz¹tek ukadu wspó³rzêdnych
+	M = translate(M, vec3(0.5f, 0.5f, -0.00001f));  // na pocz¹tek ukadu wspó³rzêdnych
 	
 	
 	
