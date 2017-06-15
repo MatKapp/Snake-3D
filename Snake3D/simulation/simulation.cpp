@@ -63,8 +63,11 @@ Element move_snake(GameModel *model, float passed_time)
 
 	//Set new head.
 	model->elements[model->head_position[0]][model->head_position[1]] = snake_head;
-	model->snake_positions_y.push_front(model->head_position[0]);
-	model->snake_positions_x.push_front(model->head_position[1]);
+
+	model->it = model->snake_positions_y.begin();
+	model->snake_positions_y.insert(model->it, model->head_position[0]);
+	model->it = model->snake_positions_x.begin();
+	model->snake_positions_x.insert(model->it, model->head_position[1]);
 
 	//Delete the tail only if snake didn't eat a fodder.
 	if (eaten_element != fodder)

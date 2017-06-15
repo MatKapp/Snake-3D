@@ -412,17 +412,17 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 				else if (elements[y][x] == slow_boost) {
 					drawSnail();
 				}
-				else if (elements[y][x] == snake_part || elements[y][x] == snake_tail) {
-					glBindTexture(GL_TEXTURE_2D, sand_tex);
+				//else if (elements[y][x] == snake_part || elements[y][x] == snake_tail) {
+				//	glBindTexture(GL_TEXTURE_2D, sand_tex);
 
-					M2 = scale(M, vec3(0.5, 0.5, 1));
-					glLoadMatrixf(value_ptr(V*M2));
+				//	M2 = scale(M, vec3(0.5, 0.5, 1));
+				//	glLoadMatrixf(value_ptr(V*M2));
 
-					glVertexPointer(3, GL_FLOAT, 0, walecPositions);
-					glTexCoordPointer(3, GL_FLOAT, 0, walecTexels);
-					glNormalPointer(GL_FLOAT, 0, walecNormals);
-					glDrawArrays(GL_TRIANGLES, 0, walecVertices);
-				}
+				//	glVertexPointer(3, GL_FLOAT, 0, walecPositions);
+				//	glTexCoordPointer(3, GL_FLOAT, 0, walecTexels);
+				//	glNormalPointer(GL_FLOAT, 0, walecNormals);
+				//	glDrawArrays(GL_TRIANGLES, 0, walecVertices);
+				//}
 
 				glDisableClientState(GL_VERTEX_ARRAY);
 				glDisableClientState(GL_NORMAL_ARRAY);
@@ -432,67 +432,100 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 		}
 	}
 
+	
 	//Draw snake
-	//Draw snake's head
-	glEnable(GL_TEXTURE_2D);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
+	// snake_positions_x has the same length as snake_positions_y
+	int size = model->snake_positions_x.size();
+	for (int i = 0; i < size; i++) {
+		int x = model->snake_positions_x[i];
+		int y = model->snake_positions_y[i];
+		glEnable(GL_TEXTURE_2D);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		if (i == 0) {
+			//Draw snake's head
 
-	glBindTexture(GL_TEXTURE_2D, pikachu_tex);
+			glBindTexture(GL_TEXTURE_2D, pikachu_tex);
 
-	M = mat4(scale_value);
-	M = translate(M, vec3(model_size *scale_value - model->head_visible_position[1] * scale_value, 0.0f, model->head_visible_position[0] * scale_value));
-	//M = scale(M, vec3(0.0714, 0.0714, 0.25));
-	glLoadMatrixf(value_ptr(V*M));
+			M = mat4(scale_value);
+			M = translate(M, vec3(model_size *scale_value - model->head_visible_position[1] * scale_value, 0.0f, model->head_visible_position[0] * scale_value));
+			glLoadMatrixf(value_ptr(V*M));
 
-	glVertexPointer(3, GL_FLOAT, 0, spherePositions);
-	glNormalPointer(GL_FLOAT, 0, sphereNormals);
-	glTexCoordPointer(3, GL_FLOAT, 0, sphereTexels);
-	glDrawArrays(GL_TRIANGLES, 0, sphereVertices);
+			glVertexPointer(3, GL_FLOAT, 0, spherePositions);
+			glNormalPointer(GL_FLOAT, 0, sphereNormals);
+			glTexCoordPointer(3, GL_FLOAT, 0, sphereTexels);
+			glDrawArrays(GL_TRIANGLES, 0, sphereVertices);
+		}
+		else if (i == size - 1) {
+			//Draw snake's tail
+			M = mat4(scale_value);
+			M = translate(M, vec3(model_size *scale_value - model->tail_visible_position[1] * scale_value, 0.0f, model->tail_visible_position[0] * scale_value));
+			glLoadMatrixf(value_ptr(V*M));
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisable(GL_TEXTURE_2D);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
+			glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
+			glNormalPointer(GL_FLOAT, 0, myCubeNormals);
+			glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
+		}
+		if (i > 0) {
+			//Draw body even on the place of the tail
+			//Horizontal or vertical
+			if ((model->snake_positions_x[i - 1] != x && model->snake_positions_x[i + 1] != x)
+					|| (model->snake_positions_y[i - 1] != y && model->snake_positions_y[i + 1] != y)){
+				M = mat4(scale_value);
+				M = translate(M, vec3(model_size *scale_value - x*scale_value, 0.0f, y*scale_value));
 
-	//Draw snake's tail
-	glEnableClientState(GL_COLOR_ARRAY);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	M = mat4(scale_value);
-	M = translate(M, vec3(model_size *scale_value - model->tail_visible_position[1] * scale_value, 0.0f, model->tail_visible_position[0] * scale_value));
-	glLoadMatrixf(value_ptr(V*M));
+				//Rotate by 90 degrees if horizontal
+				if (model->snake_positions_x[i - 1] != x && model->snake_positions_x[i + 1] != x) {
+					M = rotate(M, PI / 2, vec3(0, 1, 0));
+				}
+				M = scale(M, vec3(0.5, 0.5, 1));
+				glLoadMatrixf(value_ptr(V*M));
 
-	glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
-	glNormalPointer(GL_FLOAT, 0, myCubeNormals);
-	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
+				glBindTexture(GL_TEXTURE_2D, sand_tex);
 
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
+				glVertexPointer(3, GL_FLOAT, 0, walecPositions);
+				glTexCoordPointer(3, GL_FLOAT, 0, walecTexels);
+				glNormalPointer(GL_FLOAT, 0, walecNormals);
+				glDrawArrays(GL_TRIANGLES, 0, walecVertices);
+			}
+			//Corner
+			else {
+				M = mat4(scale_value);
+				M = translate(M, vec3(model_size *scale_value - x*scale_value, 0.0f, y*scale_value));
 
-	//int snake_length = model->snake_positions_x.size();
-	//std::list<int>::iterator x_it = model->snake_positions_x.begin();
-	//std::list<int>::iterator y_it = model->snake_positions_y.begin();
-	//for (int i = 1; i < snake_length - 1; i++)
-	//{
-	//	int& x = *x_it;
-	//	int& y = *y_it;
-	//	std::advance(x_it, 1);
-	//	std::advance(y_it, 1);
+				//Rotate
 
-	//	//Draw snake's part
-	//	M = mat4(scale_value);
-	//	M = translate(M, vec3(model_size *scale_value - x * scale_value, 0.0f, y * scale_value));
-	//	glLoadMatrixf(value_ptr(V*M));
+				if (model->snake_positions_x[i - 1] < x && model->snake_positions_y[i + 1] < y) {
+					M = rotate(M, PI / 4, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_x[i - 1] < x && model->snake_positions_y[i + 1] > y) {
+					M = rotate(M, 5*PI / 4, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_x[i - 1] > x && model->snake_positions_y[i + 1] > y) {
+					M = rotate(M, 3 * PI / 4, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_x[i - 1] > x && model->snake_positions_y[i + 1] > y) {
+					M = rotate(M, 7 * PI / 4, vec3(0, 1, 0));
+				}
 
-	//	glVertexPointer(3, GL_FLOAT, 0, myCubeVertices);
-	//	glColorPointer(3, GL_FLOAT, 0, myCubeColors2);
-	//	glNormalPointer(GL_FLOAT, 0, myCubeNormals);
-	//	glDrawArrays(GL_TRIANGLES, 0, myCubeVertexCount);
-	//}
+				M = scale(M, vec3(0.5, 0.5, 1));
+				glLoadMatrixf(value_ptr(V*M));
+
+				glBindTexture(GL_TEXTURE_2D, sand_tex);
+
+				glVertexPointer(3, GL_FLOAT, 0, walecPositions);
+				glTexCoordPointer(3, GL_FLOAT, 0, walecTexels);
+				glNormalPointer(GL_FLOAT, 0, walecNormals);
+				glDrawArrays(GL_TRIANGLES, 0, walecVertices);
+			}
+		}
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisable(GL_TEXTURE_2D);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	}
 };
 
 	

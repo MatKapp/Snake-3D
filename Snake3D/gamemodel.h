@@ -1,6 +1,6 @@
 #ifndef gamemodel_H
 #define gamemodel_H
-#include <list>
+#include <vector>
 
 #define SIZE 70
 enum Direction { up=0, right=1, down=2, left=3 };
@@ -56,8 +56,9 @@ public:
 
 	//Positions of the body of the snake.
 	//At index 0 we have the position of the head, at last position - of the tail.
-	std::list<int> snake_positions_y;
-	std::list<int> snake_positions_x;
+	std::vector<int> snake_positions_y;
+	std::vector<int> snake_positions_x;
+	std::vector<int>::iterator it;
 	int head_position[2];
 	int tail_position[2];
 
