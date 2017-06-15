@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="apple.h" />
+    <ClInclude Include="bend.h" />
     <ClInclude Include="cone.h" />
     <ClInclude Include="draw2D\draw2D.h" />
     <ClInclude Include="draw3D\draw3D.h" />

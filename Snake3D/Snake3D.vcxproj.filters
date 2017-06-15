@@ -101,5 +101,8 @@
     <ClInclude Include="walec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="bend.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include "../mySnail.h"
 #include "../cone.h"
 #include "../walec.h"
+#include "../bend.h"
 
 
 using namespace glm;
@@ -450,6 +451,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 
 			M = mat4(scale_value);
 			M = translate(M, vec3(model_size *scale_value - model->head_visible_position[1] * scale_value, 0.0f, model->head_visible_position[0] * scale_value));
+			M = scale(M, vec3(1.5, 1.5, 1.5));
 			glLoadMatrixf(value_ptr(V*M));
 
 			glVertexPointer(3, GL_FLOAT, 0, spherePositions);
@@ -480,7 +482,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 				if (model->snake_positions_x[i - 1] != x && model->snake_positions_x[i + 1] != x) {
 					M = rotate(M, PI / 2, vec3(0, 1, 0));
 				}
-				M = scale(M, vec3(0.5, 0.5, 1));
+				M = scale(M, vec3(1, 1, 1.1));	//Lengthen the body a bit
 				glLoadMatrixf(value_ptr(V*M));
 
 				glBindTexture(GL_TEXTURE_2D, sand_tex);
@@ -496,29 +498,40 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 				M = translate(M, vec3(model_size *scale_value - x*scale_value, 0.0f, y*scale_value));
 
 				//Rotate
+				if (model->snake_positions_x[i + 1] < x && model->snake_positions_y[i - 1] < y) {
+					//M = rotate(M, 0, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_x[i + 1] < x && model->snake_positions_y[i - 1] > y) {
+					M = rotate(M, 3*PI/2, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_x[i + 1] > x && model->snake_positions_y[i - 1] < y) {
+					M = rotate(M, PI/2, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_x[i + 1] > x && model->snake_positions_y[i - 1] > y) {
+					M = rotate(M, PI, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_y[i + 1] < y && model->snake_positions_x[i - 1] < x) {
+					//M = rotate(M, 3*PI/2, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_y[i + 1] < y && model->snake_positions_x[i - 1] > x) {
+					M = rotate(M, PI/2, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_y[i + 1] > y && model->snake_positions_x[i - 1] < x) {
+					M = rotate(M, 3*PI/2, vec3(0, 1, 0));
+				}
+				else if (model->snake_positions_y[i + 1] > y && model->snake_positions_x[i - 1] > x) {
+					M = rotate(M, PI, vec3(0, 1, 0));
+				}
+				//M = scale(M, vec3(0.5, 0.5, 1));
 
-				if (model->snake_positions_x[i - 1] < x && model->snake_positions_y[i + 1] < y) {
-					M = rotate(M, PI / 4, vec3(0, 1, 0));
-				}
-				else if (model->snake_positions_x[i - 1] < x && model->snake_positions_y[i + 1] > y) {
-					M = rotate(M, 5*PI / 4, vec3(0, 1, 0));
-				}
-				else if (model->snake_positions_x[i - 1] > x && model->snake_positions_y[i + 1] > y) {
-					M = rotate(M, 3 * PI / 4, vec3(0, 1, 0));
-				}
-				else if (model->snake_positions_x[i - 1] > x && model->snake_positions_y[i + 1] > y) {
-					M = rotate(M, 7 * PI / 4, vec3(0, 1, 0));
-				}
-
-				M = scale(M, vec3(0.5, 0.5, 1));
 				glLoadMatrixf(value_ptr(V*M));
 
 				glBindTexture(GL_TEXTURE_2D, sand_tex);
 
-				glVertexPointer(3, GL_FLOAT, 0, walecPositions);
-				glTexCoordPointer(3, GL_FLOAT, 0, walecTexels);
-				glNormalPointer(GL_FLOAT, 0, walecNormals);
-				glDrawArrays(GL_TRIANGLES, 0, walecVertices);
+				glVertexPointer(3, GL_FLOAT, 0, bendPositions);
+				glTexCoordPointer(3, GL_FLOAT, 0, bendTexels);
+				glNormalPointer(GL_FLOAT, 0, bendNormals);
+				glDrawArrays(GL_TRIANGLES, 0, bendVertices);
 			}
 		}
 		glDisableClientState(GL_VERTEX_ARRAY);
