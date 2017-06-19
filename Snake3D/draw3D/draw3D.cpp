@@ -169,7 +169,7 @@ void drawSnail()
 
 	glVertexPointer(3, GL_FLOAT, 0, mySnailPositions);
 	glNormalPointer(GL_FLOAT, 0, mySnailNormals);
-	glTexCoordPointer(3, GL_FLOAT, 0, mySnailTexels);
+	glTexCoordPointer(2, GL_FLOAT, 0, mySnailTexels);
 	glDrawArrays(GL_TRIANGLES, 0, mySnailVertices);
 }
 
@@ -406,7 +406,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 					
 					glVertexPointer(3, GL_FLOAT, 0, pikachu2Positions);
 					glNormalPointer(GL_FLOAT, 0, pikachu2Normals);					
-					glTexCoordPointer(3, GL_FLOAT, 0, pikachu2Texels);
+					glTexCoordPointer(2, GL_FLOAT, 0, pikachu2Texels);
 
 					glDrawArrays(GL_TRIANGLES, 0, pikachu2Vertices);
 				}
@@ -456,7 +456,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 
 			glVertexPointer(3, GL_FLOAT, 0, spherePositions);
 			glNormalPointer(GL_FLOAT, 0, sphereNormals);
-			glTexCoordPointer(3, GL_FLOAT, 0, sphereTexels);
+			glTexCoordPointer(2, GL_FLOAT, 0, sphereTexels);
 			glDrawArrays(GL_TRIANGLES, 0, sphereVertices);
 		}
 		else if (i == size - 1) {
@@ -488,7 +488,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 				glBindTexture(GL_TEXTURE_2D, sand_tex);
 
 				glVertexPointer(3, GL_FLOAT, 0, walecPositions);
-				glTexCoordPointer(3, GL_FLOAT, 0, walecTexels);
+				glTexCoordPointer(2, GL_FLOAT, 0, walecTexels);
 				glNormalPointer(GL_FLOAT, 0, walecNormals);
 				glDrawArrays(GL_TRIANGLES, 0, walecVertices);
 			}
@@ -529,7 +529,7 @@ void drawGame(GLFWwindow* window, GameModel *model, float passed_time) {
 				glBindTexture(GL_TEXTURE_2D, sand_tex);
 
 				glVertexPointer(3, GL_FLOAT, 0, bendPositions);
-				glTexCoordPointer(3, GL_FLOAT, 0, bendTexels);
+				glTexCoordPointer(2, GL_FLOAT, 0, bendTexels);
 				glNormalPointer(GL_FLOAT, 0, bendNormals);
 				glDrawArrays(GL_TRIANGLES, 0, bendVertices);
 			}
